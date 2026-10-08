@@ -1,0 +1,27 @@
+{
+  "name": "lyne-admin-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Dashboard web d'administration LYNE RESTAURANT — React + Vite + TypeScript.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lyne/shared": "*",
+    "@lyne/ui": "*",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "@types/react": "~19.2.2",
+    "@types/react-dom": "~19.2.2",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1"
+  }
+}

@@ -1,0 +1,250 @@
+# AGENTS.md — LYNE RESTAURANT
+
+Journal de suivi du développement incrémental (spec §0, §13).
+
+> **Règles absolues** : travailler uniquement sur la phase autorisée · valider
+> une phase avant de commencer la suivante · diagnostics avant code · aucune
+> donnée sensible supprimée silencieusement · totaux calculés côté serveur ·
+> rapport de fin de phase + commit clair après validation.
+
+---
+
+## Contexte technique
+
+| Élément | Choix validé | Réf. |
+|---|---|---|
+| Monorepo | npm workspaces (Node 24, npm ≥11.19.1 ; référence 11.19.1) | Phase 0 |
+| API | Fastify 5 + TypeScript | Phase 0 (spec §6) |
+| DB | MySQL 8+, ORM **Prisma** (Phase 1) | spec §6 |
+| Validation | Zod 4 (`@lyne/shared`) | spec §6 |
+| Web admin | React 19 + Vite 8 + TS | Phase 0 (spec §6) |
+| Mobile | Expo SDK 57 / RN 0.86 / TS 6 | Phase 0 |
+| Charte UI | Tokens dans `@lyne/ui`, palette par défaut éditable | Phase 0 |
+| CI | **Non activée par choix** ; validations exécutées par l'agent, sans GitHub | décision utilisateur du 25/09/2026 |
+| Git | Historique conservé pour récupération ; commits suspendus temporairement | décision utilisateur du 06/10/2026 |
+| Serveur | Déploiements SSH ; API Node 24 gérée par LiteSpeed ; vitrine et gestion séparées par chemins | décisions des 25 et 28/09/2026 |
+
+### Fonctionnement validé le 25/09/2026
+
+- L'utilisateur pilote et valide les phases ; l'agent réalise le développement,
+  les tests et les interventions serveur via SSH.
+- GitHub, un dépôt distant et une CI hébergée ne sont pas des prérequis pour
+  continuer ni pour clôturer une phase. Git local conserve l'historique avec
+  un commit après validation de chaque phase.
+- Pour chaque phase autorisée : diagnostic, développement, contrôles locaux
+  et serveur applicables, mise à disposition pour recette, rapport, puis
+  validation utilisateur avant de commencer la suivante.
+- Les versions présentées sur le serveur servent à la recette progressive ;
+  la validation de mise en production reste prévue en Phase 12.
+- Cette décision remplace l'attente d'un dépôt privé distant mentionnée dans
+  le cadrage initial. Les exigences de tests et de protection des données restent
+  applicables.
+
+### Reprise autorisée le 06/10/2026
+
+- L'utilisateur demande de récupérer les fichiers manquants et de corriger
+  le socle avant de poursuivre le développement, en privilégiant SSH.
+- À sa demande, Git est laissé de côté temporairement pour le travail courant
+  et les commits. Son historique existant peut servir à récupérer les fichiers ;
+  aucun commit, dépôt distant ou travail de branche n'est requis pour cette reprise.
+  Cette décision remplace temporairement l'exigence de commit de clôture.
+- Les sauvegardes, tests, rapports et validations de phase restent nécessaires.
+  La Phase 2 est autorisée ; les phases suivantes commencent après validation
+  de la phase précédente.
+- Sauvegarde privée préalable : `.tmp/recovery-20261006-346be2f7/`.
+  Les 74 fichiers suivis absents ont été récupérés sans écraser les fichiers
+  présents. Le rapport du lot connexion a aussi été récupéré.
+- Le serveur répond encore avec l'API Phase 1. La release compilée de Phase 2
+  est conservée sous `.tmp/phase2-20260928/` ; elle ne constitue pas une preuve
+  de livraison ou de recette du Personnel. Toute migration et publication
+  serveur doit être précédée des contrôles applicables et d'une sauvegarde.
+
+---
+
+## Phase 0 — Cadrage & fondations (validée le 25/09/2026)
+
+### Livrables
+- [x] Arborescence monorepo (`apps/`, `services/`, `packages/`, `database/`, `docs/`)
+- [x] `.env.example` global + par service
+- [x] `README.md` (installation/init)
+- [x] `AGENTS.md` (ce journal)
+- [x] Charte UI de base : `packages/ui` (design tokens) + `docs/charte-ui.md`
+- [x] Build/lint/typecheck locaux (scripts npm à la racine)
+- [x] Cahier des charges présent : `docs/cahier-des-charges/` (texte extrait v1.0 ; commit après validation)
+
+### Décisions techniques
+1. **Fastify** retenu (pas Express) — validation schema intégrée, alignée Zod.
+2. **Pas de GitHub ni de CI hébergée requis** — développement avec l'agent,
+   validation utilisateur et interventions serveur par SSH ; Git local pour
+   l'historique. Procédure dans `docs/ci-build.md`.
+3. **Charte UI par défaut éditable** — client n'a pas fourni logo/couleurs
+   (spec §15) ; tokens centralisés, remplaçables en un fichier.
+4. **Exports `@lyne/*` → src** (`packages/shared|ui`) : idéal pour Vite et tsx.
+   ⚠️ À **revoir en Phase 1** : passer sur `dist` + ordre de build pour la
+   consommation runtime de l'API (compilation `tsc` → `node dist`).
+5. **Mobile découplé des workspaces en Phase 0** — éviter la config Metro
+   (transpilation de sources TS d'autres workspaces) ; consommera
+   `@lyne/shared` (dist) avec config Metro dédiée dès qu'il en aura besoin.
+6. **Alignement React 19.2.3** entre mobile (pin Expo) et admin-web (pin
+   identique) pour un seul exemplaire de `react` dans l'arbre npm.
+7. **Aucun framework de test en Phase 0** (aucune logique métier) — **Vitest**
+   introduit en Phase 1 (unitaires métier + intégration API).
+8. **Pas de migration/seed en Phase 0** — `database/migrations|seed` réservés
+   à la Phase 1 (migrations non destructives, RG-08).
+9. **ESLint 9.39.5 partagé** — les plugins React/import d'Expo 57 ne déclarent
+   pas la compatibilité ESLint 10. Rester en 9 jusqu'à leur compatibilité vérifiée.
+10. **npm 11.19.1 minimum** — corrige la propagation des overrides à travers
+    les workspaces. Utilisable via `npx --yes npm@11.19.1` sans mise à jour globale.
+11. **Override limité à `xcode → uuid@11.1.1`** — correction de l'avis
+    GHSA-w5hq-g745-h8pq ; Expo 57 et React Native 0.86 conservés.
+12. **Environnement API** — scripts dev/start avec chargement natif Node des
+    fichiers optionnels : racine puis service ; l'environnement du processus
+    reste prioritaire. Web et mobile utilisent leur propre `.env`.
+
+### Vérifications
+
+Résultats du 25/09/2026 après correction ; rapport : `docs/rapport-phase-0.md`.
+
+- [x] Installation corrigée avec npm 11.19.1
+- [x] `npx --yes npm@11.19.1 ci` — réinstallation complète réussie
+- [x] `npm run build`
+- [x] `npm run typecheck`
+- [x] `npm run lint`
+- [x] `npm run lint:mobile`
+- [x] Expo Doctor — 21/21
+- [x] Arbre npm valide ; `uuid@11.1.1` effectivement appliqué
+- [x] Audit complet et production — 0 vulnérabilité signalée
+- [x] Chargement `.env` : fichiers absents, racine, service et priorité du processus
+- [x] Compatibilité xcode/uuid ; API Phase 0, HTTP 200 en modes dev et compilé
+- [x] Connexion SSH en lecture seule
+- [x] Validation finale de la Phase 0 par l'utilisateur — accord pour passer à la Phase 1 le 25/09/2026
+- [x] Commit local de clôture : `6405dec`
+
+### Points restants / risques
+- Modèle exact de mini-imprimante à confirmer (spec §6/§15) avant Phase 5.
+- Données initiales client manquantes (logo, personnel, menu, fournisseurs…) :
+  demander en amont des phases concernées (spec §15).
+- Connexion SSH vérifiée : `u748819186@217.65.157.197:65002`. Le client MySQL
+  est présent ; Node/npm ne sont pas dans le PATH testé. Vérifier l'environnement
+  Node et le mode d'exécution persistant avant déploiement API (voir `docs/serveur.md`).
+- Informations MySQL enregistrées pour plus tard à la demande de l'utilisateur :
+  valeurs privées dans `services/api/.env`, ignoré par Git ; aucune connexion DB
+  ni migration effectuée. L'existence de la base et ses droits restent à vérifier
+  en Phase 1. Aucun hébergement de dépôt Git distant n'est requis.
+
+---
+
+## Phases suivantes (spec §12)
+
+### Phase 1 — passage à la Phase 2 validé le 28/09/2026, réserves tracées
+
+Plan : schéma Prisma/MySQL non destructif (comptes, rôles, permissions,
+sessions et audit), seed admin idempotent, authentification et autorisations
+côté API, `/health`, documentation OpenAPI, connexion web/mobile et tests Vitest.
+Pas de CRUD personnel/menu ni d'opérations financières dans cette phase.
+
+Diagnostic et intervention du 28/09/2026 : Node 24.19.0 dans
+`/opt/alt/alt-nodejs24/root/usr/bin`, MariaDB 11.8.9 (connecteur Prisma MySQL),
+migration socle appliquée et seed administrateur exécuté sur le serveur.
+L'idempotence du seed et le fonctionnement avec la vraie base sont vérifiés.
+
+À la demande la plus récente de l'utilisateur, le déploiement utilise uniquement
+SSH et conserve la vitrine : bouton de pied de page « Se connecter », gestion
+sous `/gestion/` et API sous `/api/` sur le même domaine. Cette solution remplace
+le sous-domaine de gestion envisagé ; ni hPanel ni GitHub ne sont nécessaires.
+LiteSpeed gère le processus Node avec les directives Passenger vérifiées sur
+cet hébergement. Code et secrets sont hors du site public ; le transfert des
+paramètres MySQL et du secret initial a été explicitement autorisé par l'utilisateur
+vers `/home/u748819186/lyne-app/`. Les trois fichiers de configuration ont le mode 600.
+
+Les sessions sont des jetons opaques révocables, dont seule l'empreinte est
+stockée en base : cookie HttpOnly pour le web, stockage sécurisé pour le mobile.
+Ce choix respecte l'option sessions/token du cahier des charges.
+
+Contrôles : 19 tests Vitest réussis, build et typage complets, lints racine/mobile,
+Expo Doctor 21/21, export Android, vérification réelle MySQL, connexion HTTPS
+web/mobile, changement initial obligatoire, révocation à la déconnexion,
+contrôle d'origine et `/health` fonctionnels. Page de connexion vérifiée dans
+le navigateur, dont affichage mobile et refus des identifiants incorrects.
+
+Audit des dépendances du livrable API : aucun signalement. L'arbre complet
+conserve un avis modéré mobile (`decode-uri-component` via Expo Router,
+trois paquets affectés), documenté sans imposer de mise à jour incompatible.
+
+Rapport et recette : `docs/rapport-phase-1.md`. L'utilisateur a explicitement
+demandé de continuer la Phase 2 le 28/09/2026. Cet accord valide le passage de
+phase ; il ne constitue pas une preuve d'essai Android réel ou de changement
+du mot de passe. Ces réserves restent tracées. Les constats Phase 0 ci-dessus
+restent historiques. Commit local de clôture : `fb2344f`.
+
+### Phase 2 — autorisée le 28/09/2026, en cours
+
+Lancement officiel confirmé par l'utilisateur après livraison du login.
+Diagnostic et plan d'exécution : `docs/plan-phase-2.md`.
+
+L'utilisateur demande de poursuivre la Phase 2 et de commencer par harmoniser
+la connexion selon sa référence visuelle, avec les couleurs de l'entreprise.
+
+Premier lot : charte rouge/noir/blanc du logo et de la vitrine, connexion à
+deux panneaux arrondis, formulaire responsive, logo existant et bouton
+afficher/masquer le mot de passe. Aucun changement des comptes, sessions,
+permissions ou règles de mot de passe ; pas de migration dans ce lot.
+
+Build, typage, lint et 24 tests réussis ; inspection desktop/tablette/mobile
+et publication SSH avec sauvegarde du web précédent. Rapport du lot :
+`docs/rapport-phase-2-login.md`. L'API reste le socle Phase 1 ; cette livraison
+visuelle ne clôture pas la Phase 2.
+
+Suite de la phase : diagnostic et schéma non destructif pour employés,
+fonctions et services ; CRUD et comptes associés avec permissions serveur,
+statuts employé/compte distincts (RG-11), photos privées et cartes imprimables ;
+tests, déploiement SSH et recette avant clôture. Aucun module Personnel n'est
+déclaré livré par la seule harmonisation de connexion.
+
+| Phase | Objet | Livrable / porte de sortie |
+|---|---|---|
+| 1 | Base de données & API socle | Login fonctionnel, seed admin, RBAC testé, `/health` OK |
+| 2 | Personnel & administration | CRUD personnel complet, permissions, carte imprimable |
+| 3 | Menu / Produits | Catalogue exploitable par la réception |
+| 4 | Commandes | Flux Nouvelle→Préparation→Prête→Servie testé |
+| 5 | Caisse, paiements & impression | Commande payée → ticket sans doublon financier |
+| 6 | Stocks | Stock traçable et alertes fonctionnelles |
+| 7 | Achats & fournisseurs | Validation achat → stock + finance une seule fois |
+| 8 | Finances | Chiffres cohérents avec ventes/paiements/achats |
+| 9 | Dashboard & rapports | Rapports vérifiés contre données source |
+| 10 | Notifications & audit renforcé | Actions sensibles consultables, alertes pertinentes |
+| 11 | QA, sécurité & optimisation | Zéro bug bloquant ; restauration testée |
+| 12 | Production & formation | Production accessible, sauvegardes actives, PV de recette |
+
+---
+
+## Vitrine publique — livraison du 28/09/2026
+
+À la demande explicite de l'utilisateur, les sept visuels fournis dans `images/`
+ont été intégrés et publiés sur https://lyne-restau.alikakonnect.com/ pour
+présentation à la cliente. Source conservée dans `website/`, conversion WebP
+(environ 90 % de poids économisé), originaux intacts, sauvegarde privée de
+l'ancienne version et remplacement atomique du HTML via SSH.
+
+Contrôles locaux et HTTPS public réussis : huit ressources image (dont le logo),
+affichage 1440/768/390/320 px, menu mobile, absence d'erreurs JavaScript/HTTP et
+liens de contact. Rapport : `docs/rapport-vitrine-20260928.md`.
+
+Cette livraison ne clôture pas la Phase 1 de gestion ; aucune intervention sur
+la base ou l'API n'a été réalisée pour la vitrine. Validation cliente en attente.
+
+---
+
+## Commandes de référence
+
+```bash
+npm run build        # build shared → ui → api → admin-web + typecheck mobile
+npm run typecheck    # tsc --noEmit partout (y compris Expo)
+npm run lint         # ESLint racine (shared/ui/api/admin-web)
+npm run lint:mobile  # expo lint
+npm run dev:api      # Fastify sur :4000
+npm run dev:admin-web# Vite sur :5173
+npm run dev:mobile   # Expo
+```
+
+Voir aussi : `README.md`, `docs/charte-ui.md`, `docs/ci-build.md`, `database/README.md`.

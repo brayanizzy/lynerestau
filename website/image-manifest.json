@@ -1,0 +1,58 @@
+[
+  {
+    "source": "Image ChatGPT 28 sept. 2026, 10_01_17.png",
+    "asset": "assets/visuels-20260928/boissons.webp",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 165404,
+    "sha256": "f7c04611805ef2400c78afb78054c50920bf94734cd8b6df832feeb68770da76"
+  },
+  {
+    "source": "Image ChatGPT 28 sept. 2026, 10_01_41.png",
+    "asset": "assets/visuels-20260928/poulet-plantains.webp",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 310532,
+    "sha256": "5734a68429f5ee7f48c33da0452ca0020f5d1db61821c3ba6ca36783d428139f"
+  },
+  {
+    "source": "Image ChatGPT 28 sept. 2026, 10_01_50.png",
+    "asset": "assets/visuels-20260928/pizza.webp",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 237818,
+    "sha256": "ce615d85a8c404860e005cb11a5310a72333b733103a0e7bb02b1e201d2616a0"
+  },
+  {
+    "source": "Image ChatGPT 28 sept. 2026, 10_01_57.png",
+    "asset": "assets/visuels-20260928/poulet-riz-legumes.webp",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 205126,
+    "sha256": "579ca2d8cad03d856f97a41dcc19196376601b3493c9334b866a45dad24de83f"
+  },
+  {
+    "source": "Image ChatGPT 28 sept. 2026, 10_02_05.png",
+    "asset": "assets/visuels-20260928/poisson-accompagnements.webp",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 339286,
+    "sha256": "f099ac610cb841dcfc605ad34c62cd96fd83607c2e986303e4efa5d66dcc2d83"
+  },
+  {
+    "source": "Image ChatGPT 28 sept. 2026, 10_02_29.png",
+    "asset": "assets/visuels-20260928/salle-restaurant.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 274978,
+    "sha256": "3addf1bd96df2b3213cb0ba26c4f350d188c7e1bd67b3e95e1d1a94b432073bf"
+  },
+  {
+    "source": "Image ChatGPT 28 sept. 2026, 10_02_39.png",
+    "asset": "assets/visuels-20260928/accueil-saveurs.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 221788,
+    "sha256": "fc2254d13d100481d0975ae20e3c612b86447b8e77de8c40905aa2c09dcd9ce8"
+  }
+]

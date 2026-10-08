@@ -1,0 +1,10 @@
+PassengerAppRoot /home/u748819186/lyne-app/phase1-20260928
+PassengerBaseURI /api
+PassengerAppType node
+PassengerStartupFile app.cjs
+PassengerNodejs /opt/alt/alt-nodejs24/root/usr/bin/node
+PassengerAppEnv production
+<IfModule LiteSpeed>
+  RewriteEngine On
+  RewriteRule .* - [E=Cache-Control:no-cache]
+</IfModule>

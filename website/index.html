@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LYNE Restaurant | Les bons goûts de chez nous</title>
+  <meta name="description"
+        content="Découvrez LYNE Restaurant à Bunia : cuisine congolaise, plats savoureux et cadre chaleureux. Réservation : +243 823 539 440.">
+  <meta name="theme-color" content="#b40712">
+  <link rel="canonical" href="https://lyne-restau.alikakonnect.com/">
+  <link rel="icon" type="image/png" href="logo-lyne.png">
+  <link rel="preload" as="image" href="assets/visuels-20260928/accueil-saveurs.webp" fetchpriority="high">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_CD">
+  <meta property="og:title" content="LYNE Restaurant — Les bons goûts de chez nous">
+  <meta property="og:description" content="Une cuisine généreuse et un cadre chaleureux à Bunia. Découvrez nos saveurs et contactez-nous pour réserver.">
+  <meta property="og:url" content="https://lyne-restau.alikakonnect.com/">
+  <meta property="og:image" content="https://lyne-restau.alikakonnect.com/assets/visuels-20260928/accueil-saveurs.webp">
+  <meta property="og:image:alt" content="Une assiette de poisson, riz et bananes plantains dans un cadre chaleureux">
+
+  <style>
+    :root{
+      --red:#b40712;
+      --red-dark:#85040c;
+      --black:#111111;
+      --white:#ffffff;
+      --cream:#faf6f1;
+      --gray:#6c6c6c;
+      --light:#f5f5f5;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+      scroll-padding-top:100px;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--black);
+      background:var(--white);
+      line-height:1.6;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    :focus-visible{
+      outline:3px solid var(--red);
+      outline-offset:5px;
+    }
+
+    img{
+      max-width:100%;
+      display:block;
+    }
+
+    .container{
+      width:min(1180px, 90%);
+      margin:auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      z-index:1000;
+      background:rgba(255,255,255,.96);
+      box-shadow:0 2px 20px rgba(0,0,0,.08);
+    }
+
+    nav{
+      min-height:82px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:30px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .brand img{
+      width:64px;
+      height:64px;
+      object-fit:contain;
+    }
+
+    .brand-text strong{
+      display:block;
+      font-size:19px;
+      letter-spacing:1px;
+    }
+
+    .brand-text span{
+      color:var(--red);
+      font-size:12px;
+    }
+
+    .nav-links{
+      display:flex;
+      list-style:none;
+      align-items:center;
+      gap:30px;
+      font-weight:600;
+      font-size:14px;
+    }
+
+    .nav-links a:hover{
+      color:var(--red);
+    }
+
+    .nav-book{
+      padding:12px 22px;
+      background:var(--red);
+      color:white !important;
+      border-radius:30px;
+    }
+
+    .menu-toggle{
+      display:none;
+      font-size:28px;
+      cursor:pointer;
+      min-width:44px;
+      min-height:44px;
+      border:0;
+      background:transparent;
+      color:var(--black);
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero{
+      min-height:100vh;
+      padding-top:82px;
+      display:flex;
+      align-items:center;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(90deg,
+        rgba(0,0,0,.84) 0%,
+        rgba(0,0,0,.62) 46%,
+        rgba(0,0,0,.12) 100%),
+        url("assets/visuels-20260928/accueil-saveurs.webp") center/cover no-repeat;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:500px;
+      height:500px;
+      border:80px solid rgba(180,7,18,.18);
+      border-radius:50%;
+      right:-250px;
+      bottom:-250px;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:2;
+      max-width:680px;
+      color:white;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      padding:7px 15px;
+      border-left:4px solid var(--red);
+      background:rgba(255,255,255,.12);
+      text-transform:uppercase;
+      letter-spacing:3px;
+      font-size:12px;
+      margin-bottom:22px;
+    }
+
+    .hero h1{
+      font-size:clamp(48px,7vw,88px);
+      line-height:.98;
+      margin-bottom:20px;
+    }
+
+    .hero h1 span{
+      color:#e51a25;
+    }
+
+    .hero h2{
+      font-family:Georgia,serif;
+      font-size:clamp(24px,3vw,38px);
+      font-weight:normal;
+      margin-bottom:20px;
+    }
+
+    .hero p{
+      max-width:580px;
+      color:#e6e6e6;
+      font-size:17px;
+      margin-bottom:32px;
+    }
+
+    .hero-buttons{
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:52px;
+      padding:0 28px;
+      border-radius:30px;
+      font-weight:700;
+      transition:.25s;
+    }
+
+    .btn-red{
+      background:var(--red);
+      color:white;
+    }
+
+    .btn-red:hover{
+      background:var(--red-dark);
+      transform:translateY(-2px);
+    }
+
+    .btn-outline{
+      color:white;
+      border:1px solid rgba(255,255,255,.7);
+    }
+
+    .btn-outline:hover{
+      background:white;
+      color:black;
+    }
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    section{
+      padding:95px 0;
+    }
+
+    .section-label{
+      color:var(--red);
+      text-transform:uppercase;
+      letter-spacing:3px;
+      font-size:12px;
+      font-weight:bold;
+      margin-bottom:10px;
+    }
+
+    .section-title{
+      font-family:Georgia,serif;
+      font-size:clamp(35px,5vw,55px);
+      line-height:1.1;
+      margin-bottom:20px;
+    }
+
+    .section-intro{
+      max-width:650px;
+      color:var(--gray);
+      margin-bottom:45px;
+    }
+
+    /* ABOUT */
+
+    .about-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      align-items:center;
+      gap:70px;
+    }
+
+    .about-visual{
+      position:relative;
+      min-height:520px;
+      border-radius:30px;
+      overflow:hidden;
+      background:#30271f;
+    }
+
+    .about-visual > img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:60% center;
+    }
+
+    .about-badge{
+      position:absolute;
+      right:20px;
+      bottom:20px;
+      width:180px;
+      padding:25px;
+      background:var(--red);
+      color:white;
+      border-radius:20px;
+    }
+
+    .about-badge strong{
+      display:block;
+      font-size:27px;
+      font-family:Georgia,serif;
+    }
+
+    .about-text p{
+      color:var(--gray);
+      margin-bottom:18px;
+    }
+
+    .features{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+      margin-top:30px;
+    }
+
+    .feature{
+      background:var(--cream);
+      padding:18px;
+      border-radius:15px;
+      font-weight:600;
+    }
+
+    .feature span{
+      color:var(--red);
+      margin-right:8px;
+    }
+
+    /* SPECIALITES */
+
+    .specialites{
+      background:var(--cream);
+    }
+
+    .food-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:25px;
+    }
+
+    .food-card{
+      min-height:410px;
+      position:relative;
+      border-radius:22px;
+      overflow:hidden;
+      background:#222;
+      box-shadow:0 20px 45px rgba(0,0,0,.12);
+    }
+
+    .food-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      position:absolute;
+    }
+
+    .food-overlay{
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding:25px;
+      color:white;
+      background:linear-gradient(transparent 35%,rgba(0,0,0,.85));
+    }
+
+    .food-overlay h3{
+      font-size:25px;
+      margin-bottom:5px;
+    }
+
+    .food-overlay p{
+      color:#ddd;
+      font-size:14px;
+    }
+
+    /* WHY */
+
+    .why-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:25px;
+    }
+
+    .why-card{
+      padding:38px 28px;
+      border:1px solid #eee;
+      border-radius:20px;
+      transition:.3s;
+    }
+
+    .why-card:hover{
+      transform:translateY(-7px);
+      box-shadow:0 18px 50px rgba(0,0,0,.08);
+      border-color:transparent;
+    }
+
+    .why-icon{
+      width:55px;
+      height:55px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:var(--red);
+      color:white;
+      font-size:24px;
+      margin-bottom:20px;
+    }
+
+    .why-card h3{
+      margin-bottom:10px;
+      font-size:21px;
+    }
+
+    .why-card p{
+      color:var(--gray);
+    }
+
+    /* GALLERY */
+
+    .gallery{
+      background:#111;
+      color:white;
+    }
+
+    .gallery .section-intro{
+      color:#aaa;
+    }
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      grid-template-rows:260px 260px;
+      gap:12px;
+    }
+
+    .gallery-item{
+      overflow:hidden;
+      border-radius:15px;
+    }
+
+    .gallery-item:first-child{
+      grid-row:1/3;
+    }
+
+    .gallery-item img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:.4s;
+    }
+
+    .gallery-item:hover img{
+      transform:scale(1.06);
+    }
+
+    /* CTA */
+
+    .cta{
+      background:var(--red);
+      color:white;
+      text-align:center;
+      padding:75px 20px;
+    }
+
+    .cta h2{
+      font-family:Georgia,serif;
+      font-size:clamp(35px,5vw,55px);
+      margin-bottom:12px;
+    }
+
+    .cta p{
+      max-width:650px;
+      margin:0 auto 28px;
+      color:#ffe5e5;
+    }
+
+    .cta .btn{
+      background:white;
+      color:var(--red);
+    }
+
+    /* CONTACT */
+
+    .contact-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:60px;
+    }
+
+    .contact-box{
+      background:var(--cream);
+      padding:35px;
+      border-radius:25px;
+    }
+
+    .contact-item{
+      margin-bottom:25px;
+    }
+
+    .contact-item small{
+      display:block;
+      color:var(--red);
+      text-transform:uppercase;
+      letter-spacing:2px;
+      margin-bottom:5px;
+    }
+
+    .contact-item strong{
+      font-size:19px;
+    }
+
+    .socials{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .socials span{
+      padding:10px 15px;
+      background:#111;
+      color:white;
+      border-radius:20px;
+      font-size:13px;
+    }
+
+    .contact-message{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    /* FOOTER */
+
+    footer{
+      background:#080808;
+      color:#aaa;
+      padding:45px 0;
+    }
+
+    .footer-content{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:30px;
+    }
+
+    .footer-logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:white;
+    }
+
+    .footer-logo img{
+      width:65px;
+      background:white;
+      border-radius:50%;
+    }
+
+    .staff-login{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      padding:10px 22px;
+      border:1px solid #777;
+      border-radius:999px;
+      color:white;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .staff-login:hover,
+    .staff-login:focus-visible{
+      background:var(--red);
+      border-color:var(--red);
+      outline:2px solid white;
+      outline-offset:4px;
+    }
+
+    /* WHATSAPP */
+
+    .whatsapp{
+      position:fixed;
+      right:22px;
+      bottom:22px;
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#25D366;
+      color:white;
+      font-size:28px;
+      z-index:999;
+      box-shadow:0 8px 25px rgba(0,0,0,.25);
+    }
+
+    /* MOBILE */
+
+    @media(max-width:850px){
+
+      .menu-toggle{
+        display:block;
+      }
+
+      .nav-links{
+        display:none;
+        position:absolute;
+        top:82px;
+        left:0;
+        width:100%;
+        background:white;
+        flex-direction:column;
+        padding:30px;
+        box-shadow:0 10px 20px rgba(0,0,0,.1);
+      }
+
+      .nav-links.active{
+        display:flex;
+      }
+
+      .hero{
+        background:
+          linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.74)),
+          url("assets/visuels-20260928/accueil-saveurs.webp") 62% center/cover no-repeat;
+      }
+
+      .about-grid,
+      .contact-grid{
+        grid-template-columns:1fr;
+      }
+
+      .food-grid,
+      .why-grid{
+        grid-template-columns:1fr;
+      }
+
+      .gallery-grid{
+        grid-template-columns:1fr 1fr;
+        grid-template-rows:300px 220px 220px;
+      }
+
+      .gallery-item:first-child{
+        grid-column:1/3;
+        grid-row:auto;
+      }
+
+      .footer-content{
+        flex-direction:column;
+        text-align:center;
+      }
+    }
+
+    @media(max-width:520px){
+
+      section{
+        padding:70px 0;
+      }
+
+      .brand-text{
+        display:none;
+      }
+
+      .hero h1{
+        font-size:clamp(34px,10vw,48px);
+      }
+
+      .hero{
+        min-height:100svh;
+        padding-top:122px;
+      }
+
+      .about-visual{
+        min-height:400px;
+      }
+
+      .features{
+        grid-template-columns:1fr;
+      }
+
+      .gallery-grid{
+        display:block;
+      }
+
+      .gallery-item{
+        height:260px;
+        margin-bottom:12px;
+      }
+
+      .hero-buttons .btn{
+        width:100%;
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto;}
+      *,*::before,*::after{transition:none !important;}
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+
+      <a href="#accueil" class="brand">
+        <img src="logo-lyne.png" alt="Logo LYNE Restaurant" width="64" height="64">
+
+        <div class="brand-text">
+          <strong>LYNE RESTAURANT</strong>
+          <span>Les bons goûts de chez nous</span>
+        </div>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#accueil">Accueil</a></li>
+        <li><a href="#apropos">À propos</a></li>
+        <li><a href="#specialites">Nos plats</a></li>
+        <li><a href="#galerie">Galerie</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li>
+          <a class="nav-book"
+             href="https://wa.me/243823539440"
+             target="_blank" rel="noopener noreferrer">
+             Réserver
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+  </div>
+</header>
+
+
+<!-- HERO -->
+<section class="hero" id="accueil">
+  <div class="container">
+
+    <div class="hero-content">
+
+      <span class="eyebrow">Bienvenue à Bunia</span>
+
+      <h1>
+        CHEZ <span>LYNE</span><br>
+        RESTAURANT
+      </h1>
+
+      <h2>Les bons goûts de chez nous.</h2>
+
+      <p>
+        Découvrez une cuisine généreuse, traditionnelle et moderne
+        dans un cadre chaleureux pensé pour vos repas, vos rencontres
+        et vos bons moments.
+      </p>
+
+      <div class="hero-buttons">
+
+        <a href="https://wa.me/243823539440"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn-red">
+           Réserver une table
+        </a>
+
+        <a href="#contact" class="btn btn-outline">
+          Nous trouver
+        </a>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ABOUT -->
+<section id="apropos">
+  <div class="container">
+
+    <div class="about-grid">
+
+      <div class="about-visual">
+        <img src="assets/visuels-20260928/salle-restaurant.webp" alt="Une salle chaleureuse aux banquettes bleues et aux murs fleuris" width="1672" height="941" loading="lazy" decoding="async">
+        <div class="about-badge">
+          <strong>Bienvenue !</strong>
+          Chez LYNE Restaurant, on mange bien.
+        </div>
+      </div>
+
+      <div class="about-text">
+
+        <div class="section-label">Notre restaurant</div>
+
+        <h2 class="section-title">
+          Le goût, le plaisir et la convivialité.
+        </h2>
+
+        <p>
+          LYNE Restaurant vous accueille à Bunia dans un environnement
+          agréable pour découvrir une sélection de plats inspirés de
+          notre cuisine locale et de saveurs modernes.
+        </p>
+
+        <p>
+          Seul, en couple, en famille, entre amis ou en groupe,
+          profitez d'un espace où la cuisine et l'accueil sont au
+          centre de l'expérience.
+        </p>
+
+        <div class="features">
+          <div class="feature"><span>✓</span> Cuisine traditionnelle</div>
+          <div class="feature"><span>✓</span> Plats modernes</div>
+          <div class="feature"><span>✓</span> Cadre chaleureux</div>
+          <div class="feature"><span>✓</span> Service attentionné</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- SPECIALITES -->
+<section class="specialites" id="specialites">
+
+  <div class="container">
+
+    <div class="section-label">À découvrir</div>
+
+    <h2 class="section-title">Nos saveurs</h2>
+
+    <p class="section-intro">
+      Des plats généreux qui mettent à l'honneur les saveurs
+      que nous aimons partager.
+    </p>
+
+    <div class="food-grid">
+
+      <article class="food-card">
+        <img src="assets/visuels-20260928/poulet-riz-legumes.webp" alt="Assiette de poulet grillé, riz et légumes" width="1254" height="1254" loading="lazy" decoding="async">
+        <div class="food-overlay">
+          <h3>Saveurs traditionnelles</h3>
+          <p>Des goûts authentiques inspirés de chez nous.</p>
+        </div>
+      </article>
+
+      <article class="food-card">
+        <img src="assets/visuels-20260928/poisson-accompagnements.webp" alt="Poisson en sauce, légumes et accompagnements" width="1254" height="1254" loading="lazy" decoding="async">
+        <div class="food-overlay">
+          <h3>Poisson & accompagnements</h3>
+          <p>Une assiette généreuse et savoureuse.</p>
+        </div>
+      </article>
+
+      <article class="food-card">
+        <img src="assets/visuels-20260928/poulet-plantains.webp" alt="Poulet grillé accompagné de bananes plantains" width="1254" height="1254" loading="lazy" decoding="async">
+        <div class="food-overlay">
+          <h3>Cuisine maison</h3>
+          <p>Des plats préparés pour vous faire plaisir.</p>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- POURQUOI LYNE -->
+<section>
+
+  <div class="container">
+
+    <div class="section-label">L'expérience LYNE</div>
+
+    <h2 class="section-title">Pourquoi venir chez nous ?</h2>
+
+    <div class="why-grid">
+
+      <div class="why-card">
+        <div class="why-icon">♨</div>
+        <h3>Des plats savoureux</h3>
+        <p>
+          Une cuisine pensée autour du goût, de la générosité
+          et des saveurs de chez nous.
+        </p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">♥</div>
+        <h3>Un cadre agréable</h3>
+        <p>
+          Un environnement chaleureux pour manger,
+          discuter et passer un bon moment.
+        </p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">★</div>
+        <h3>Une expérience complète</h3>
+        <p>
+          Une attention particulière portée à votre accueil
+          et à votre expérience au restaurant.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- GALERIE -->
+<section class="gallery" id="galerie">
+
+  <div class="container">
+
+    <div class="section-label">En images</div>
+
+    <h2 class="section-title">Découvrez LYNE Restaurant</h2>
+
+    <p class="section-intro">
+      Un aperçu de notre cuisine, de notre cadre et de l'ambiance
+      qui vous attend chez nous.
+    </p>
+
+    <div class="gallery-grid">
+
+      <div class="gallery-item">
+        <img src="assets/visuels-20260928/salle-restaurant.webp" alt="Tables et banquettes dans une salle lumineuse au décor floral" width="1672" height="941" loading="lazy" decoding="async">
+      </div>
+
+      <div class="gallery-item">
+        <img src="assets/visuels-20260928/poulet-plantains.webp" alt="Poulet grillé et bananes plantains dorées" width="1254" height="1254" loading="lazy" decoding="async">
+      </div>
+
+      <div class="gallery-item">
+        <img src="assets/visuels-20260928/pizza.webp" alt="Pizza garnie de tomates, fromage et basilic" width="1254" height="1254" loading="lazy" decoding="async">
+      </div>
+
+      <div class="gallery-item">
+        <img src="assets/visuels-20260928/boissons.webp" alt="Boissons fraîches servies avec des glaçons" width="1254" height="1254" loading="lazy" decoding="async">
+      </div>
+
+      <div class="gallery-item">
+        <img src="assets/visuels-20260928/poisson-accompagnements.webp" alt="Assiette de poisson en sauce et légumes" width="1254" height="1254" loading="lazy" decoding="async">
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- CTA -->
+<div class="cta">
+
+  <h2>Une envie de bien manger ?</h2>
+
+  <p>
+    Venez vivre l'expérience LYNE Restaurant.
+    Nous serons heureux de vous accueillir à Bunia.
+  </p>
+
+  <a href="https://wa.me/243823539440"
+     target="_blank" rel="noopener noreferrer"
+     class="btn">
+     Réserver via WhatsApp
+  </a>
+
+</div>
+
+
+<!-- CONTACT -->
+<section id="contact">
+
+  <div class="container">
+
+    <div class="contact-grid">
+
+      <div class="contact-message">
+
+        <div class="section-label">Contact & réservation</div>
+
+        <h2 class="section-title">
+          Venez nous rendre visite.
+        </h2>
+
+        <p class="section-intro">
+          Vous souhaitez réserver une table ou obtenir plus
+          d'informations ? Contactez directement LYNE Restaurant.
+        </p>
+
+        <a href="https://wa.me/243823539440"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn-red"
+           style="align-self:flex-start;">
+           Nous contacter
+        </a>
+
+      </div>
+
+
+      <div class="contact-box">
+
+        <div class="contact-item">
+          <small>Réservation / Booking</small>
+          <strong><a href="tel:+243823539440">+243 823 539 440</a></strong>
+        </div>
+
+        <div class="contact-item">
+          <small>Adresse</small>
+          <strong>
+            Quartier Lumumba<br>
+            Avenue de Libération<br>
+            Réf. Nangolu Coach<br>
+            Bunia — RDC
+          </strong>
+        </div>
+
+        <div class="contact-item">
+          <small>Suivez LYNE Restaurant</small>
+
+          <div class="socials">
+            <span>Facebook</span>
+            <span>Instagram</span>
+            <span>TikTok</span>
+            <span>WhatsApp</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<footer>
+
+  <div class="container footer-content">
+
+    <div class="footer-logo">
+      <img src="logo-lyne.png" alt="LYNE Restaurant" width="65" height="65" loading="lazy" decoding="async">
+      <strong>LYNE RESTAURANT</strong>
+    </div>
+
+    <p>
+      © <span id="year"></span> LYNE Restaurant — Bunia, RDC.
+    </p>
+
+    <a class="staff-login" href="/gestion/">Se connecter</a>
+
+  </div>
+
+</footer>
+
+
+<!-- BOUTON WHATSAPP -->
+<a
+  href="https://wa.me/243823539440"
+  target="_blank" rel="noopener noreferrer"
+  class="whatsapp"
+  aria-label="Contacter LYNE Restaurant sur WhatsApp">
+  ☎
+</a>
+
+
+<script>
+
+  const menuButton = document.querySelector(".menu-toggle");
+  const navLinks = document.getElementById("navLinks");
+
+  function setMenu(open){
+    navLinks.classList.toggle("active", open);
+    menuButton.setAttribute("aria-expanded", String(open));
+    menuButton.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+  }
+
+  menuButton.addEventListener("click", () => setMenu(menuButton.getAttribute("aria-expanded") !== "true"));
+
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      setMenu(false);
+    });
+  });
+
+  document.addEventListener("keydown", event => {
+    if(event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true"){
+      setMenu(false);
+      menuButton.focus();
+    }
+  });
+
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

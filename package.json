@@ -1,0 +1,71 @@
+{
+  "name": "lyne-restaurant",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LYNE RESTAURANT — Système interne de gestion de restaurant (monorepo).",
+  "license": "UNLICENSED",
+  "packageManager": "npm@11.19.1",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.19.1"
+  },
+  "scripts": {
+    "build": "npm run build:shared && npm run build:ui && npm run build:api && npm run build:admin-web && npm run typecheck:mobile",
+    "build:shared": "npm run build --workspace @lyne/shared",
+    "build:ui": "npm run build --workspace @lyne/ui",
+    "build:api": "npm run db:generate && npm run build --workspace lyne-api",
+    "build:admin-web": "npm run build --workspace lyne-admin-web",
+    "build:mobile": "npm run typecheck --workspace lyne-mobile",
+    "typecheck": "npm run build:shared && npm run build:ui && npm run db:generate && npm run typecheck:shared && npm run typecheck:ui && npm run typecheck:api && npm run typecheck:admin-web && npm run typecheck:mobile",
+    "typecheck:shared": "npm run typecheck --workspace @lyne/shared",
+    "typecheck:ui": "npm run typecheck --workspace @lyne/ui",
+    "typecheck:api": "npm run typecheck --workspace lyne-api",
+    "typecheck:admin-web": "npm run typecheck --workspace lyne-admin-web",
+    "typecheck:mobile": "npm run typecheck --workspace lyne-mobile",
+    "lint": "eslint .",
+    "lint:mobile": "npm run lint --workspace lyne-mobile",
+    "dev:api": "npm run build:shared && npm run db:generate && npm run dev --workspace lyne-api",
+    "dev:admin-web": "npm run build:shared && npm run build:ui && npm run dev --workspace lyne-admin-web",
+    "dev:mobile": "npm run build:shared && npm run start --workspace lyne-mobile",
+    "db:generate": "node node_modules/prisma/build/index.js generate --config database/prisma.config.ts",
+    "db:validate": "node node_modules/prisma/build/index.js validate --config database/prisma.config.ts",
+    "db:deploy": "npm run db:check-history && node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/prisma/build/index.js migrate deploy --config database/prisma.config.ts",
+    "db:status": "node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/prisma/build/index.js migrate status --config database/prisma.config.ts",
+    "db:seed": "npm run db:seed --workspace lyne-api",
+    "test": "npm run build:shared && npm run db:generate && vitest run",
+    "db:check-history": "node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/tsx/dist/cli.mjs services/api/scripts/check-migration-history.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "prisma": "7.10.0",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "4.1.11"
+  },
+  "overrides": {
+    "@prisma/adapter-mariadb": {
+      "mariadb": "3.4.7"
+    },
+    "@prisma/config": {
+      "deepmerge-ts": "8.0.2"
+    },
+    "prisma": {
+      "mysql2": "3.24.4"
+    },
+    "xcode": {
+      "uuid": "11.1.1"
+    }
+  },
+  "allowScripts": {
+    "@prisma/engines@7.10.0": true,
+    "argon2@0.45.1": true,
+    "esbuild@0.28.2": true,
+    "prisma@7.10.0": true,
+    "unrs-resolver@1.12.2": true
+  }
+}

@@ -1,0 +1,64 @@
+/**
+ * Charte UI LYNE RESTAURANT — variables CSS générées depuis les tokens TypeScript.
+ * source de vérité : packages/ui/src/tokens/*.ts
+ */
+:root {
+  /* Marque */
+  --lyne-brand-primary: #b40712;
+  --lyne-brand-dark: #85040c;
+  --lyne-brand-soft: #f8e9e9;
+  --lyne-brand-glow: #f59c8c;
+  --lyne-brand-shadow: #36030b;
+  --lyne-brand-on-primary: #ffffff;
+  --lyne-brand-accent: #111111;
+  --lyne-brand-on-accent: #ffffff;
+
+  /* Surfaces */
+  --lyne-surface-background: #faf8f8;
+  --lyne-surface-card: #ffffff;
+  --lyne-surface-muted: #f3eeee;
+
+  /* Texte */
+  --lyne-text-primary: #111111;
+  --lyne-text-secondary: #5c5c5c;
+  --lyne-text-disabled: #9c9c9c;
+  --lyne-text-on-dark: #ffffff;
+
+  /* Bordures */
+  --lyne-border-default: #e2dada;
+  --lyne-border-strong: #b8aaaa;
+
+  /* Sémantique */
+  --lyne-semantic-danger: #b3261e;
+  --lyne-semantic-success: #2e7d32;
+  --lyne-semantic-warning: #b26a00;
+  --lyne-semantic-info: #1565c0;
+
+  /* Typographie */
+  --lyne-font-sans: "System-UI", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  --lyne-font-mono: "Cascadia Mono", "JetBrains Mono", "Consolas", monospace;
+  --lyne-font-size-caption: 12px;
+  --lyne-font-size-body-sm: 14px;
+  --lyne-font-size-body: 16px;
+  --lyne-font-size-lead: 18px;
+  --lyne-font-size-h4: 20px;
+  --lyne-font-size-h3: 24px;
+  --lyne-font-size-h2: 32px;
+  --lyne-font-size-h1: 40px;
+
+  /* Echelle / rayons / élévation */
+  --lyne-space-xs4: 4px;
+  --lyne-space-xs: 8px;
+  --lyne-space-sm: 12px;
+  --lyne-space-md: 16px;
+  --lyne-space-lg: 24px;
+  --lyne-space-xl: 32px;
+  --lyne-space-xxl: 48px;
+  --lyne-radius-sm: 4px;
+  --lyne-radius-md: 8px;
+  --lyne-radius-lg: 12px;
+  --lyne-elevation-flat: 0;
+  --lyne-elevation-low: 1;
+  --lyne-elevation-medium: 2;
+  --lyne-touch-target-min: 44px;
+}

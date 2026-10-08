@@ -1,0 +1,44 @@
+# ---- Dépendances & builds ----
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# ---- Variables d'environnement ----
+.env
+.env.*
+!.env.example
+*.local
+
+# ---- Logs & données locales ----
+logs/
+*.log
+.npm/
+.tmp/
+
+# ---- Expo / React Native ----
+.expo/
+.expo-shared/
+web-build/
+*.jks
+*.p8p
+*.p12
+*.key
+*.mobileprovision
+
+# ---- Vite / Web ----
+dist-ssr/
+*.local
+
+# ---- IDE & OS ----
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- Base de données (jamais de dump réel versionné) ----
+database/*.sql
+database/backups/
+services/api/src/generated/
