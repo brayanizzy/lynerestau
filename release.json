@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "23adcdf999b25bb6c4e707e92ab2f03d952ea2b7",
+  "scope": "public-web-only",
+  "apiRelease": "phase2-recovery-20261006",
+  "databaseMigration": false,
+  "files": {
+    "index.html": "0d44e38aea111dd010732cf59cf952bf3acdfce820e9f704206a209b58112585",
+    "logo-lyne.png": "cdefa81b9a2d05d3affcd4e589bce8b89d3855c7b81a5fb9a8404419e0b6f71c",
+    "assets/visuels-20260928/accueil-saveurs.webp": "fc2254d13d100481d0975ae20e3c612b86447b8e77de8c40905aa2c09dcd9ce8",
+    "assets/visuels-20260928/boissons.webp": "f7c04611805ef2400c78afb78054c50920bf94734cd8b6df832feeb68770da76",
+    "assets/visuels-20260928/pizza.webp": "ce615d85a8c404860e005cb11a5310a72333b733103a0e7bb02b1e201d2616a0",
+    "assets/visuels-20260928/poisson-accompagnements.webp": "f099ac610cb841dcfc605ad34c62cd96fd83607c2e986303e4efa5d66dcc2d83",
+    "assets/visuels-20260928/poulet-plantains.webp": "5734a68429f5ee7f48c33da0452ca0020f5d1db61821c3ba6ca36783d428139f",
+    "assets/visuels-20260928/poulet-riz-legumes.webp": "579ca2d8cad03d856f97a41dcc19196376601b3493c9334b866a45dad24de83f",
+    "assets/visuels-20260928/salle-restaurant.webp": "3addf1bd96df2b3213cb0ba26c4f350d188c7e1bd67b3e95e1d1a94b432073bf",
+    "gestion/assets/index-DyPd8yzN.css": "f5e05b74dc43cb6606ee1ba8c7779e7599ed2c16cc1b9f8414b43e4fe93facbf",
+    "gestion/assets/index-h4h43dbb.js": "84d353cf0a6c38b2fd26bb2f51201a2ffaffb88e66e1acb0104a5dddcb27e5bd",
+    "gestion/assets/logo-lyne-CEGfF7zc.png": "cdefa81b9a2d05d3affcd4e589bce8b89d3855c7b81a5fb9a8404419e0b6f71c",
+    "gestion/index.html": "0720d64e31a1d7df17baada10d8e23207e5e33ba7bf83242c37cf773f8491e9c",
+    ".htaccess": "e643f4e8c23a918440d5ff91144f9b7a3257884ce220c565de750b2679971e49",
+    "api/.htaccess": "62bbc4ec598ed917a39daa15c532481c546b50d3da5a851563bb800f29ef5de7"
+  }
+}

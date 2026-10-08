@@ -1,0 +1,12 @@
+# Restore the private Phase 2 release recovered on 6 October.
+# This file neither installs a new API release nor changes the database.
+PassengerAppRoot /home/u748819186/lyne-app/phase2-recovery-20261006
+PassengerBaseURI /api
+PassengerAppType node
+PassengerStartupFile app.cjs
+PassengerNodejs /opt/alt/alt-nodejs24/root/usr/bin/node
+PassengerAppEnv production
+<IfModule LiteSpeed>
+  RewriteEngine On
+  RewriteRule .* - [E=Cache-Control:no-cache]
+</IfModule>

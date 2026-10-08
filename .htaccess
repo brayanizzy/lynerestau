@@ -1,0 +1,11 @@
+DirectoryIndex index.html
+Options -Indexes
+RewriteEngine On
+
+# Existing private Node API, managed by LiteSpeed in api/.htaccess.
+RewriteRule ^health/?$ /api/health [L]
+
+# Only serve deployment paths, even if an old source checkout remains on disk.
+RewriteRule ^$ - [L]
+RewriteRule ^(?:index\.html|logo-lyne\.png|release\.json|assets/.*|gestion(?:/.*)?|api(?:/.*)?|\.well-known/acme-challenge/.*)$ - [L]
+RewriteRule ^ - [R=404,L]
