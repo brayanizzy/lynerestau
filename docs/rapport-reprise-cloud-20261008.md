@@ -21,6 +21,8 @@ Le nouvel audit signale `GHSA-pqg4-j6r4-53mv` sur `shell-quote@1.10.0`, dépenda
 
 L'audit complet passe de 23 à 22 paquets signalés, avec zéro critique. Les 19 signalements élevés et 3 modérés restants proviennent des avis sur `braces`, `node-forge` et `decode-uri-component`, principalement dans la chaîne Expo. Les propositions automatiques comprennent des changements majeurs incompatibles : aucun `audit fix --force` n'est appliqué. Leur traitement reste à planifier avec les vérifications mobiles.
 
+L'audit distinct du verrouillage de production de la release API (`npm audit --omit=dev --package-lock-only`) ne signale aucune vulnérabilité connue au moment du contrôle.
+
 ## Contrôles exécutés
 
 - Installation verrouillée avec Node 24.19.0 et npm 11.19.1 : réussie, 1 066 paquets installés.
@@ -32,6 +34,8 @@ L'audit complet passe de 23 à 22 paquets signalés, avec zéro critique. Les 19
 - Intégration réelle de la release fournie : `PHASE2_INTEGRATION_OK`, sur la base locale uniquement. Vérifications CRUD, références, confidentialité des salaires, unicités, versions, archivage/restauration, cartes, rôles, mots de passe temporaires, révocation et audit. Les données de test sont annulées par transaction ; le compte initial local est préservé.
 - API locale : `/health` répond HTTP 200, `status=ok`, `database=up`, `phase=2`.
 - Navigateur local, largeur 390 px : connexion HTTP 200, formulaire de changement initial obligatoire affiché, déconnexion HTTP 200 et retour au formulaire. Aucune exception JavaScript observée.
+- Réinstallation depuis le verrouillage corrigé et reconstruction web : réussies. HTML, JS, CSS et logo reconstruits identiques à la release fournie.
+- Arrêt puis redémarrage de la base locale et des services : réussis. Réexécution des instructions de démarrage : services existants conservés et contrôles HTTP réussis.
 
 **Limite Prisma :** le build global s'arrête au téléchargement du checksum du moteur depuis `binaries.prisma.sh`, refusé par le proxy. Le domaine a été ajouté au brouillon de configuration cloud ; son application et la régénération restent à vérifier. Aucune vérification de checksum ou TLS n'a été désactivée.
 
