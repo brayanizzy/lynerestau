@@ -348,3 +348,9 @@ Personnel et Menu, recette navigateur et lecture seule réception réussissent.
 Le web vérifie `/api/v1/capabilities` avant d'afficher le catalogue ; il reste
 compatible avec l'API Phase 2 en ligne. Rapport : `docs/phase-3-menu-20261009.md`.
 Migrations locales uniquement ; catalogue serveur non activé, Phase 3 non clôturée.
+
+Publication confirmée : source `23cf4f7` sur main, web `1bae3ff` sur hostinger-web,
+manifeste et empreintes HTTPS conformes, accueil/gestion 200. API serveur toujours
+Phase 2, DB disponible, session anonyme 401. L'utilisateur confirme l'accès à
+phpMyAdmin ; prochaine étape : `database/diagnostics/hostinger-phase3-readonly.sql`,
+puis sauvegarde/restauration isolée et réconciliation avant activation API/Menu.
