@@ -1,0 +1,52 @@
+name: Diagnostic SSH Hostinger
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hostinger-diagnostic
+  cancel-in-progress: false
+jobs:
+  ssh-network:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Observer la clé publique SSH sans authentification
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp
+          ssh-keyscan -T 15 -t ed25519 -p 65002 217.65.157.197 > .tmp/hostinger_known_hosts
+          test -s .tmp/hostinger_known_hosts
+          ssh-keygen -lf .tmp/hostinger_known_hosts
+      - name: Conserver la première clé observée, sans remplacer une clé existante
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64, json, os, pathlib, urllib.request, urllib.error
+          path = pathlib.Path('.tmp/hostinger_known_hosts')
+          observed = path.read_bytes()
+          existing = pathlib.Path('.github/hostinger_known_hosts')
+          if existing.exists():
+              if existing.read_bytes() != observed:
+                  raise SystemExit('Clé SSH différente : arrêt, aucune modification et aucun identifiant envoyé.')
+              print('Clé déjà enregistrée et identique.')
+          else:
+              url = 'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY'] + '/contents/.github/hostinger_known_hosts'
+              payload = json.dumps({'message': 'ops: record Hostinger SSH host key observed by GitHub runner', 'content': base64.b64encode(observed).decode(), 'branch': 'main'}).encode()
+              request = urllib.request.Request(url, data=payload, method='PUT', headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'LYNE-SSH-diagnostic'})
+              try:
+                  with urllib.request.urlopen(request, timeout=20) as response:
+                      if response.status != 201: raise SystemExit('Enregistrement de clé non confirmé.')
+              except urllib.error.HTTPError as error:
+                  raise SystemExit('GitHub refuse l’enregistrement de clé : HTTP ' + str(error.code))
+              print('Première clé publique SSH enregistrée. Aucun mot de passe envoyé au serveur.')
+          PY
