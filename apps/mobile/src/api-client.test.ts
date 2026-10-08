@@ -7,6 +7,8 @@ describe("transport mobile", () => {
     const fetcher = vi.fn(async () => Response.json({ ok: true, data: { version: 2 } })); vi.stubGlobal("fetch", fetcher);
     expect(await apiRequest(settings(), "/employees/one", { version: 1 }, "PATCH")).toEqual({ version: 2 });
     expect(fetcher).toHaveBeenCalledWith("https://lyne.invalid/api/v1/employees/one", expect.objectContaining({ method: "PATCH", credentials: "omit", headers: expect.objectContaining({ Authorization: "Bearer private-session" }) }));
+    await apiRequest(settings(), "/employees?search=nom..compose");
+    expect(fetcher).toHaveBeenLastCalledWith("https://lyne.invalid/api/v1/employees?search=nom..compose", expect.any(Object));
   });
   it("révoque une session même si un proxy répond 401 en HTML", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response("<html>Unauthorized</html>", { status: 401 })));

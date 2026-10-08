@@ -16,7 +16,8 @@ export async function apiRequest<T>(options: ClientOptions, path: string, body?:
   try { base = new URL(options.base); } catch { throw new Error("L’adresse de l’API doit être configurée."); }
   if (base.username || base.password || base.search || base.hash || !["http:", "https:"].includes(base.protocol)
     || (!options.development && base.protocol !== "https:")) throw new Error("L’adresse HTTPS de l’API doit être configurée.");
-  if (!path.startsWith("/") || path.startsWith("//") || path.includes("\\") || path.includes("..")) throw new Error("Adresse de requête invalide.");
+  const resource = path.split("?")[0]!;
+  if (!resource.startsWith("/") || resource.startsWith("//") || resource.includes("\\") || resource.includes("..")) throw new Error("Adresse de requête invalide.");
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15000);
   try {
