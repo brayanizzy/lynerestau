@@ -340,3 +340,11 @@ Périmètre Phase 3 : catalogue navigateur, catégories, produits, prix audités
 disponibilité, statut et photos. Aucune commande/paiement/stock dans ce lot.
 Conserver GitHub/Hostinger pour le web ; API privée et migrations nécessitent
 une livraison compatible avant activation du catalogue en ligne.
+
+Catalogue Phase 3 implémenté : catégories/produits, prix décimaux et historique
+transactionnel, disponibilité effective, photos privées, permissions et versions.
+84 tests, builds/types/lint, évolution MariaDB et installation neuve, intégration
+Personnel et Menu, recette navigateur et lecture seule réception réussissent.
+Le web vérifie `/api/v1/capabilities` avant d'afficher le catalogue ; il reste
+compatible avec l'API Phase 2 en ligne. Rapport : `docs/phase-3-menu-20261009.md`.
+Migrations locales uniquement ; catalogue serveur non activé, Phase 3 non clôturée.

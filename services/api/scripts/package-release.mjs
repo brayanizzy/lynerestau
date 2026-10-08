@@ -16,7 +16,7 @@ const dependencies = {};
 for (const name of Object.keys(api.dependencies)) {
   dependencies[name] = name === '@lyne/shared' ? 'file:./packages/shared' : lock.packages[`node_modules/${name}`].version;
 }
-const manifest = { name: 'lyne-phase2-release', version: '0.3.0', private: true, type: 'module',
+const manifest = { name: 'lyne-api-release', version: '0.4.0', private: true, type: 'module',
   engines: { node: '>=24' }, scripts: { start: 'node app.cjs', seed: 'node --env-file=../.env --env-file=../.env.seed api/seed.js', verify: 'node --env-file=../.env verify-phase2.mjs' },
   dependencies, overrides: { '@prisma/adapter-mariadb': rootPackage.overrides['@prisma/adapter-mariadb'] } };
 await writeFile(join(target, 'package.json'), JSON.stringify(manifest, null, 2) + '\n');

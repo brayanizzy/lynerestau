@@ -1,0 +1,91 @@
+import assert from 'node:assert/strict';
+import { randomBytes } from 'node:crypto';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import sharp from 'sharp';
+import { PERMISSIONS, MenuQuerySchema } from '@lyne/shared';
+import { createDatabase } from '../dist/db.js';
+import { databaseUrl } from '../dist/database-config.js';
+import { createMenuRepository } from '../dist/menu/repository.js';
+import { createRepository } from '../dist/auth/prisma-repository.js';
+import { createPhotoStore } from '../dist/admin/photos.js';
+import { hashPassword } from '../dist/auth/password.js';
+import { buildApp } from '../dist/application.js';
+import { readConfig } from '../dist/config.js';
+
+if (!['127.0.0.1', 'localhost', '[::1]'].includes(new URL(databaseUrl()).hostname)) throw new Error('Utiliser uniquement une base locale isolée.');
+const db = createDatabase();
+const directory = await mkdtemp(join(tmpdir(), 'lyne-menu-test-'));
+const rollback = new Error('EXPECTED_ROLLBACK');
+const marker = 'menuqa' + randomBytes(5).toString('hex');
+let completed = false;
+const before = await db.user.findUnique({ where: { username: process.env.SEED_ADMIN_USERNAME || 'admin' }, select: { id: true, passwordHash: true, authVersion: true } });
+try {
+  try {
+    await db.$transaction(async tx => {
+      const adapter = new Proxy(tx, { get(target, key) { return key === '$transaction' ? async action => typeof action === 'function' ? action(target) : Promise.all(action) : target[key]; } });
+      const role = await tx.role.findUniqueOrThrow({ where: { code: 'ADMIN' } });
+      const password = randomBytes(20).toString('hex');
+      const owner = await tx.user.create({ data: { username: marker, displayName: 'Menu test', roleId: role.id, passwordHash: await hashPassword(password), mustChangePassword: false } });
+      const actor = { id: owner.id, authVersion: owner.authVersion, permissions: [...PERMISSIONS], roleCode: 'ADMIN', ipAddress: '127.0.0.1' };
+      const repository = createMenuRepository(adapter);
+      const app = await buildApp({ repository: createRepository(adapter), menuRepository: repository, photos: createPhotoStore(directory), config: readConfig({ NODE_ENV: 'test' }) });
+      try {
+        const category = await repository.saveCategory(actor, { name: marker, isActive: true });
+        const input = { code: marker.toUpperCase(), name: "Plat d'essai", categoryId: category.id, description: 'Integration only', price: '0.10', isActive: true, isAvailable: true };
+        let item = await repository.saveItem(actor, input);
+        assert.equal(item.price, '0.10'); assert.equal(item.sellable, true);
+        await assert.rejects(() => repository.saveItem(actor, input), { code: 'ALREADY_EXISTS' });
+        await assert.rejects(() => repository.saveItem(actor, { ...input, price: '0.20', version: item.version + 1 }, item.id), { code: 'VERSION_CONFLICT' });
+        assert.equal((await repository.prices(item.id, { page: 1, pageSize: 20 })).total, 1);
+        item = await repository.saveItem(actor, { ...input, price: '0.20', version: item.version }, item.id);
+        item = await repository.saveItem(actor, { ...input, price: '0.2', version: item.version }, item.id);
+        const history = await repository.prices(item.id, { page: 1, pageSize: 20 });
+        assert.equal(history.total, 2); assert.equal(history.items[0].previousPrice, '0.10'); assert.equal(history.items[0].price, '0.20'); assert.equal(history.items[0].actor.id, owner.id);
+        assert.equal((await repository.items(MenuQuerySchema.parse({ search: "d'essai" }))).items.some(x => x.id === item.id), true);
+        const inactive = await repository.saveCategory(actor, { name: marker, isActive: false, version: category.version }, category.id);
+        assert.equal((await repository.item(item.id)).sellable, false);
+        assert.equal((await repository.items(MenuQuerySchema.parse({ categoryId: category.id, availability: 'available' }))).total, 0);
+        await assert.rejects(() => repository.saveItem(actor, { ...input, code: marker.toUpperCase() + '2' }), { code: 'INVALID_CATEGORY' });
+        await repository.saveCategory(actor, { name: marker, isActive: true, version: inactive.version }, category.id);
+        item = await repository.setAvailability(actor, item.id, item.version, false);
+        assert.equal(item.sellable, false);
+        const login = await app.inject({ method: 'POST', url: '/api/v1/auth/login', headers: { 'x-lyne-client': 'mobile' }, payload: { identifier: owner.username, password } });
+        assert.equal(login.statusCode, 200);
+        const headers = { authorization: `Bearer ${login.json().data.token}`, 'x-lyne-client': 'mobile' };
+        const invalid = await app.inject({ method: 'PATCH', url: `/api/v1/menu/items/${item.id}`, headers, payload: { ...input, version: item.version, price: '-1' } });
+        assert.equal(invalid.statusCode, 400);
+        const picture = await sharp({ create: { width: 800, height: 600, channels: 3, background: 'red' } }).withExif({ IFD0: { Artist: 'private metadata' } }).jpeg().toBuffer();
+        const upload = await app.inject({ method: 'POST', url: `/api/v1/menu/items/${item.id}/photo`, headers, payload: { version: item.version, data: picture.toString('base64') } });
+        assert.equal(upload.statusCode, 200); item = upload.json().data;
+        assert.equal((await app.inject(item.photoUrl)).statusCode, 401);
+        const photo = await app.inject({ url: item.photoUrl, headers }); assert.equal(photo.statusCode, 200); assert.equal(photo.headers['cache-control'], 'private, no-store');
+        const meta = await sharp(photo.rawPayload).metadata(); assert.equal(meta.exif, undefined); assert.ok(meta.width <= 640);
+        item = await repository.setPhoto(actor, item.id, item.version, null);
+        assert.equal((await app.inject({ url: `/api/v1/menu/items/${item.id}/photo`, headers })).statusCode, 404);
+        const restrictedRole = await tx.role.create({ data: { code: marker.toUpperCase(), name: marker } });
+        const permission = await tx.permission.findUniqueOrThrow({ where: { code: 'menu.availability' } });
+        await tx.rolePermission.create({ data: { roleId: restrictedRole.id, permissionId: permission.id } });
+        const limited = await tx.user.create({ data: { username: marker + 'limited', displayName: 'Limited', passwordHash: owner.passwordHash, roleId: restrictedRole.id, mustChangePassword: false } });
+        const limitedActor = { ...actor, id: limited.id, authVersion: limited.authVersion, roleCode: restrictedRole.code };
+        await assert.rejects(() => repository.saveItem(limitedActor, input), { code: 'FORBIDDEN' });
+        item = await repository.setAvailability(limitedActor, item.id, item.version, true);
+        await tx.user.update({ where: { id: limited.id }, data: { authVersion: { increment: 1 } } });
+        await assert.rejects(() => repository.setAvailability(limitedActor, item.id, item.version, false), { code: 'SESSION_CHANGED' });
+        item = await repository.saveItem(actor, { ...input, price: '0.20', version: item.version, isActive: false }, item.id);
+        assert.equal(item.sellable, false); assert.equal((await repository.items(MenuQuerySchema.parse({ categoryId: category.id }))).total, 0);
+        assert.equal((await repository.prices(item.id, { page: 1, pageSize: 1 })).total, 2);
+        assert.equal(await tx.auditLog.count({ where: { objectId: item.id, action: 'menu.price.changed' } }), 2);
+        const spec = await app.inject({ url: '/api/v1/openapi.json', headers }); assert.equal(spec.statusCode, 200); assert.ok(spec.json().paths['/api/v1/menu/items']);
+        completed = true;
+      } finally { await app.close(); }
+      throw rollback;
+    }, { timeout: 60000 });
+  } catch (error) { if (error !== rollback) throw error; }
+  assert.equal(completed, true);
+  assert.equal(await db.user.count({ where: { username: { startsWith: marker } } }), 0);
+  assert.equal(await db.menuCategory.count({ where: { name: marker } }), 0);
+  assert.deepEqual(await db.user.findUnique({ where: { username: process.env.SEED_ADMIN_USERNAME || 'admin' }, select: { id: true, passwordHash: true, authVersion: true } }), before);
+  console.info('MENU_INTEGRATION_OK: decimal prices, atomic history/audit, conflicts, permissions/revocation, category status, availability, search, private photos, OpenAPI; transaction rolled back, administrator unchanged.');
+} finally { await db.$disconnect(); await rm(directory, { recursive: true, force: true }); }

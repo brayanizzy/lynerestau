@@ -7,7 +7,7 @@ import { z } from "zod";
  */
 
 /** Version technique partagée par tous les consumers. */
-export const SHARED_PHASE = "2";
+export const SHARED_PHASE = "3";
 
 /** Identifiant stable universel (clé primaire des tables métier, cf. spec §7). */
 export const IdSchema = z.string().min(1);
@@ -48,7 +48,7 @@ export const ChangePasswordSchema = z.strictObject({
 });
 export { PaginationSchema } from "./pagination.js";
 export type { Pagination } from "./pagination.js";
-export const PERMISSIONS = ["users.read", "roles.read", "permissions.read", "audit.read", "users.write", "users.reset", "roles.write", "employees.read", "employees.write", "employees.archive", "employees.salary", "employees.print", "references.write"] as const;
+export const PERMISSIONS = ["users.read", "roles.read", "permissions.read", "audit.read", "users.write", "users.reset", "roles.write", "employees.read", "employees.write", "employees.archive", "employees.salary", "employees.print", "references.write", "menu.read", "menu.write", "menu.availability"] as const;
 export type Permission = typeof PERMISSIONS[number];
 export interface SessionUser {
   id: string;
@@ -68,3 +68,5 @@ export interface AuthSession {
 export interface Page<T> { items: T[]; total: number; page: number; pageSize: number }
 
 export * from "./personnel.js";
+
+export * from "./menu.js";

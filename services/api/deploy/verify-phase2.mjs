@@ -8,7 +8,7 @@ import { createPhotoStore } from './api/admin/photos.js';
 import { createDatabase } from './api/db.js';
 import { createRepository } from './api/auth/prisma-repository.js';
 import { createAdminRepository } from './api/admin/repository.js';
-import { buildApp } from './api/application.js';
+import { buildApp, STATIC_PHASE } from './api/application.js';
 import { readConfig } from './api/config.js';
 import { hashPassword, tokenHash, verifyPassword } from './api/auth/password.js';
 import { PERMISSIONS } from '@lyne/shared';
@@ -100,7 +100,7 @@ try {
         const events = await tx.auditLog.findMany({ where: { userId: { in: [owner.id, low.id] } } });
         assert.ok(events.length >= 15); const log = JSON.stringify(events);
         assert.equal(log.includes(account.initialPassword), false); assert.equal(log.includes(reset.initialPassword), false); assert.equal(log.includes('123.45'), false);
-        assert.equal((await app.inject('/health')).json().phase, '2');
+        assert.equal((await app.inject('/health')).json().phase, STATIC_PHASE);
         completed = true;
       } finally { await app.close(); }
       throw rollback;

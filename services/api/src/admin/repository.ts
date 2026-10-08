@@ -31,7 +31,7 @@ function audit(tx: PrismaClient | Prisma.TransactionClient, actor: Actor, action
 }
 // Serialize access mutations on the immutable owner role. Recheck the actor inside
 // the transaction so a just-revoked session cannot complete a queued mutation.
-async function authorizeWrite(tx: Prisma.TransactionClient, actor: Actor, permission: string) {
+export async function authorizeWrite(tx: Prisma.TransactionClient, actor: Actor, permission: string) {
     await tx.$queryRaw `SELECT id FROM roles WHERE code = 'ADMIN' FOR UPDATE`;
     const current = await tx.user.findUnique({ where: { id: actor.id }, include: accountInclude });
     if (!current?.isActive || current.authVersion !== actor.authVersion)

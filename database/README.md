@@ -63,3 +63,12 @@ avec `npm run db:bootstrap`, puis `npm run db:seed`. Voir
 [la procédure baseline](baseline/README.md). Le serveur existant conserve son
 historique : cette nouvelle procédure ne répare pas automatiquement le fichier
 SQL historique manquant et ne doit pas lui être appliquée.
+
+## Phase 3 — catalogue développé dans le cloud le 9 octobre 2026
+
+Le schéma courant ajoute catégories, produits et historique des prix en DECIMAL.
+Deux migrations additives de la piste `baseline/` passent en évolution locale et
+sur une base neuve ; contrôle de schéma sans différence. La piste historique
+`migrations/` reste bloquée par le SQL Personnel manquant : aucune migration
+Phase 3 n'y est ajoutée ni appliquée à Hostinger avant réconciliation contrôlée.
+Voir `docs/phase-3-menu-20261009.md` pour la livraison et les permissions ajoutées.

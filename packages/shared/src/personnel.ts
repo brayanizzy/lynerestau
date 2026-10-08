@@ -8,6 +8,8 @@ export const PERMISSION_LABELS = {
     "employees.write": "Créer et modifier les fiches", "employees.archive": "Archiver et restaurer les fiches",
     "employees.salary": "Consulter et modifier les salaires", "employees.print": "Imprimer les cartes de service",
     "references.write": "Gérer les fonctions et services",
+    "menu.read": "Consulter le menu et les prix", "menu.write": "Gérer le catalogue et les prix",
+    "menu.availability": "Changer la disponibilité des produits",
 };
 export const EmployeeStatusSchema = z.enum(["ACTIVE", "INACTIVE", "ON_LEAVE"]);
 export const EMPLOYEE_STATUS_LABELS = { ACTIVE: "Actif", INACTIVE: "Inactif", ON_LEAVE: "En congé" };

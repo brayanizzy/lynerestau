@@ -19,19 +19,22 @@ import { HttpError, failure } from "./errors.js";
 import { createAdminRepository } from "./admin/repository.js";
 import { registerAdministration } from "./admin/routes.js";
 import { createPhotoStore, type PhotoStore } from "./admin/photos.js";
+import { createMenuRepository, type MenuRepository } from "./menu/repository.js";
+import { registerMenu } from "./menu/routes.js";
 import type { AdminRepository } from "./admin/types.js";
 
 declare module "fastify" {
   interface FastifyRequest { auth: StoredSession | null }
 }
-export const STATIC_PHASE = "2";
+export const STATIC_PHASE = "3";
 
-export async function buildApp(options: { repository?: AuthRepository; adminRepository?: AdminRepository; photos?: PhotoStore; config?: Config; now?: () => Date; webRoot?: string } = {}) {
+export async function buildApp(options: { repository?: AuthRepository; adminRepository?: AdminRepository; menuRepository?: MenuRepository; photos?: PhotoStore; config?: Config; now?: () => Date; webRoot?: string } = {}) {
   const config = options.config ?? readConfig();
   const now = options.now ?? (() => new Date());
   const db = options.repository ? undefined : createDatabase();
   const repository = options.repository ?? createRepository(db!);
   const administration = options.adminRepository ?? (db ? createAdminRepository(db) : undefined);
+  const menu = options.menuRepository ?? (db ? createMenuRepository(db) : undefined);
   const app = Fastify({
     bodyLimit: 16 * 1024,
     trustProxy: config.TRUST_PROXY === "loopback" ? "loopback" : false,
@@ -53,7 +56,7 @@ export async function buildApp(options: { repository?: AuthRepository; adminRepo
     errorResponseBuilder: () => ({ statusCode: 429, ok: false, error: { code: "RATE_LIMITED", message: "Trop de tentatives. Réessayez plus tard." } }) });
   const cookieName = config.NODE_ENV === "production" ? "__Host-lyne_session" : "lyne_session";
   await app.register(swagger, {
-    openapi: { info: { title: "LYNE RESTAURANT — API", version: "0.3.0", description: "Authentification, RBAC, audit et Personnel / administration de Phase 2." },
+    openapi: { info: { title: "LYNE RESTAURANT — API", version: "0.4.0", description: "Authentification, Personnel et catalogue / prix audités de Phase 3." },
       components: { securitySchemes: { sessionCookie: { type: "apiKey", in: "cookie", name: cookieName },
         bearerAuth: { type: "http", scheme: "bearer" } } } },
     transform: jsonSchemaTransform,
@@ -161,6 +164,9 @@ export async function buildApp(options: { repository?: AuthRepository; adminRepo
   app.get("/api/v1/roles", { schema: { tags: ["Administration"], security }, preHandler: authorize("roles.read") },
     async () => ({ ok: true, data: await repository.listRoles() }));
   }
+  app.get("/api/v1/capabilities", { schema: { tags: ["Exploitation"], security }, preHandler: authorize("menu.read") },
+    async () => ({ ok: true, data: { menu: Boolean(menu) } }));
+  if (menu) registerMenu(app, menu, options.photos ?? createPhotoStore(config.UPLOADS_DIR), authorize, checkMutation);
   app.get("/api/v1/permissions", { schema: { tags: ["Administration"], security }, preHandler: authorize("permissions.read") },
     async () => ({ ok: true, data: await repository.listPermissions() }));
   app.get("/api/v1/audit-logs", { schema: { tags: ["Audit"], security, querystring: PaginationSchema }, preHandler: authorize("audit.read") },

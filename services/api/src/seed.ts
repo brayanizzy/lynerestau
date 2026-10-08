@@ -22,12 +22,18 @@ export async function seed(db: PrismaClient, env: NodeJS.ProcessEnv = process.en
   }
   return db.$transaction(async tx => {
     const existingAdminRole = await tx.role.findUnique({ where: { code: "ADMIN" } });
+    const existingReceptionRole = await tx.role.findUnique({ where: { code: "RECEPTION" } });
     for (const [code, name] of roles) await tx.role.upsert({ where: { code }, update: {}, create: { code, name } });
     for (const code of PERMISSIONS) await tx.permission.upsert({ where: { code }, update: {}, create: { code, name: PERMISSION_LABELS[code] } });
     const role = await tx.role.findUniqueOrThrow({ where: { code: "ADMIN" } });
     if (!existingAdminRole) {
       const permissions = await tx.permission.findMany({ where: { code: { in: [...PERMISSIONS] } } });
       for (const permission of permissions) await tx.rolePermission.create({ data: { roleId: role.id, permissionId: permission.id } });
+    }
+    if (!existingReceptionRole) {
+      const reception = await tx.role.findUniqueOrThrow({ where: { code: "RECEPTION" } });
+      const readMenu = await tx.permission.findUniqueOrThrow({ where: { code: "menu.read" } });
+      await tx.rolePermission.create({ data: { roleId: reception.id, permissionId: readMenu.id } });
     }
     if (passwordHash) {
       const user = await tx.user.create({ data: { username, displayName: "Administrateur LYNE", passwordHash, roleId: role.id, mustChangePassword: true } });

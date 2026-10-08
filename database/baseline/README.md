@@ -1,13 +1,20 @@
-# Installation neuve — Phase 2
+# Installation neuve — Phases 2 et 3
 
 Cet historique est destiné exclusivement aux bases neuves. Il regroupe le schéma
-actuel dans `202610080001_phase2`, généré avec Prisma 7.10.0 :
+Phase 2 dans `202610080001_phase2`, généré avec Prisma 7.10.0 :
 
 ```bash
 node node_modules/prisma/build/index.js migrate diff --config database/prisma.config.ts --from-empty --to-schema database/schema.prisma --script
 ```
 
 Après configuration privée des paramètres DB et du secret administrateur :
+
+Le catalogue ajoute `202610090001_menu` (permissions) puis
+`202610090002_menu_tables` (catégories, produits, historique des prix). Ces
+migrations sont additives ; l'ancienne baseline reste inchangée. Le seed neuf
+accorde la lecture du catalogue à Réception et tous les droits à Administrateur.
+Sur une base existante de cette piste, la migration ajoute uniquement les droits
+menu de ces deux rôles ; les autres permissions restent inchangées.
 
 ```bash
 npm run db:bootstrap
