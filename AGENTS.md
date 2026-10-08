@@ -354,3 +354,10 @@ manifeste et empreintes HTTPS conformes, accueil/gestion 200. API serveur toujou
 Phase 2, DB disponible, session anonyme 401. L'utilisateur confirme l'accès à
 phpMyAdmin ; prochaine étape : `database/diagnostics/hostinger-phase3-readonly.sql`,
 puis sauvegarde/restauration isolée et réconciliation avant activation API/Menu.
+
+Capture phpMyAdmin reçue ensuite : deux migrations historiques (Phase 1 et
+Personnel) terminées, `rolled_back_at` NULL ; pas de migration catalogue dans le
+résultat. Checksums tronqués, pas de preuve supplémentaire de concordance du
+schéma. Demander une sauvegarde complète conservée privée et un export SQL de
+structure seule à comparer à la Phase 2. Procédure et constat exact :
+`docs/hostinger-phpmyadmin-reconciliation.md`. Aucun changement de base effectué.
