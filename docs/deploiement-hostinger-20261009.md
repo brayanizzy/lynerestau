@@ -114,3 +114,32 @@ est inchangé et les traces de recette sont conservées. Ces essais n’ont util
 aucun compte ni aucune donnée du serveur distant. Les artefacts sont conservés
 hors Git sous `.tmp/recette-web-resultats.json`, `.tmp/recette-carte-web.pdf` et
 `.tmp/recette-web-personnel-390.png` ; les identifiants de test restent privés.
+
+## Accès GitHub rétabli, exécution Actions bloquée
+
+Après publication des paramètres par l’utilisateur, l’API GitHub répond : dépôt
+accessible, lecture des workflows et déclenchement manuel autorisés. La gestion
+des secrets et des paramètres Actions reste refusée à l’intégration (HTTP 403,
+`Resource not accessible by integration`) ; cela ne prouve pas l’absence de secrets
+existants, leur liste n’étant pas accessible.
+
+Le workflow manuel `.github/workflows/hostinger-diagnostic.yml` a été ajouté et
+poussé. Il doit tester le SSH depuis un runner GitHub, sans mot de passe, puis
+conserver la première clé publique du serveur pour les connexions strictement
+vérifiées suivantes. Une clé déjà conservée n’est jamais remplacée automatiquement.
+Les actions utilisées sont épinglées à des commits. YAML et commandes Bash ont été
+vérifiés localement ; ce contrôle syntaxique ne remplace pas une exécution distante.
+
+Exécution déclenchée :
+https://github.com/brayanizzy/lynerestau/actions/runs/37855100663
+
+GitHub l’a refusée **avant toute étape**. Annotation du check `113577287947` :
+
+> The job was not started because your account is locked due to a billing issue.
+
+Le runner n’a donc pas testé le réseau, n’a pas collecté de clé SSH et n’a pas
+atteint Hostinger. Aucun déploiement ni changement DB n’en résulte. L’utilisateur
+doit vérifier la facturation de son compte GitHub et faire lever ce verrouillage.
+Ne pas relancer à répétition sans modification de cette situation ; après son
+rétablissement, relancer le diagnostic manuel puis reprendre le déploiement.
+Aucun achat ni changement de facturation n’a été effectué par l’assistant.

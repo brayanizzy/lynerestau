@@ -302,3 +302,11 @@ Recette navigateur locale complète réussie (11 groupes de parcours), dont comp
 lecture seule, photo, PDF et écran 390 px. Comptes synthétiques désactivés et fiches
 archivées après les essais ; administrateur initial inchangé. Le blocage restant
 est l’intervention effective sur le serveur et son historique, pas un APK.
+
+Après publication réseau, API GitHub accessible et diagnostic Actions déclenché.
+Run `37855100663` refusé avant toute étape : compte GitHub verrouillé pour problème
+de facturation. Workflow manuel conservé dans `.github/workflows/hostinger-diagnostic.yml`.
+Ne pas confondre cet échec avec un test SSH négatif : aucun runner n’a démarré.
+Attendre la levée du verrouillage avant de relancer ; aucun déploiement Hostinger
+ni aucune réconciliation DB n’a eu lieu. Les secrets Actions sont inaccessibles
+à l’intégration (HTTP 403), même si le dépôt et le déclenchement sont autorisés.
