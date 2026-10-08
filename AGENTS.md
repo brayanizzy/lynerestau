@@ -326,3 +326,17 @@ Procédure : `docs/hostinger-github-web.md`. L'utilisateur doit sélectionner
 La compilation et les contrôles navigateur locaux passent. Aucun accès serveur
 retrouvé ni migration réalisée ; ce canal ne livre pas l'API privée. Le périmètre
 reste navigateur et Phase 2 jusqu'à résolution des réserves serveur.
+
+## Validation utilisateur et lancement Phase 3 — 9 octobre 2026
+
+L'utilisateur demande explicitement de clôturer la Phase 2 et de lancer la Phase 3.
+Le déploiement `hostinger-web` est désormais confirmé en HTTPS : vitrine/gestion
+200, santé DB Phase 2 200, session anonyme 401, ancien package source 404.
+La Phase 2 est validée fonctionnellement, avec réserves techniques tracées dans
+`docs/cloture-phase-2-20261009.md`. Cette nouvelle décision autorise le développement
+de la Phase 3 malgré ces réserves ; ne pas présenter l'historique serveur comme
+réconcilié ni appliquer la baseline à la base historique.
+Périmètre Phase 3 : catalogue navigateur, catégories, produits, prix audités,
+disponibilité, statut et photos. Aucune commande/paiement/stock dans ce lot.
+Conserver GitHub/Hostinger pour le web ; API privée et migrations nécessitent
+une livraison compatible avant activation du catalogue en ligne.
