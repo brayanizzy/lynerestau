@@ -263,3 +263,18 @@ npm run dev:mobile   # Expo
 ```
 
 Voir aussi : `README.md`, `docs/charte-ui.md`, `docs/ci-build.md`, `database/README.md`.
+
+## Actualisation du 8 octobre 2026 — Personnel mobile et base neuve
+
+À la demande « terminons la phase 2 », le Personnel mobile (CRUD, références,
+compte associé, photo privée, carte native, archives et permissions) est développé.
+Le web conserve la gestion complète des comptes et rôles. 66 tests, builds,
+types, lints, génération officielle Prisma, export Android et intégration sur
+MariaDB réelle locale réussissent. Rapport : `docs/rapport-phase-2-20261008.md`.
+
+`db:bootstrap` initialise seulement une base vide avec `database/baseline` ;
+`db:deploy:baseline` vérifie cet historique. Le serveur historique reste protégé
+par `db:check-history` : son SQL original Personnel est toujours manquant.
+Ne pas appliquer la baseline à la production. Aucun déploiement distant dans ce lot.
+La recette sur appareil, l’impression physique, la réconciliation historique et
+la validation utilisateur restent des réserves de clôture ; pas de Phase 3.

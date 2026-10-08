@@ -165,3 +165,10 @@ le commit de clôture et l'autorisation de Phase 2.
 - Code versionné avec Git ; un commit clair clôture chaque phase validée.
 - Aucune donnée financière/stock/audit supprimée silencieusement (RG-08).
 - Totaux calculés **côté serveur** (RG-03).
+
+### Personnel — livraison du 8 octobre 2026
+
+Personnel mobile, photos privées et cartes natives complètent le web/API.
+Installation neuve : `npm run db:bootstrap` puis `npm run db:seed`, uniquement
+sur une base vide. [Rapport, preuves et recette de Phase 2](docs/rapport-phase-2-20261008.md).
+La recette physique et l’historique de migration serveur restent à finaliser.

@@ -38,7 +38,9 @@
     "db:status": "node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/prisma/build/index.js migrate status --config database/prisma.config.ts",
     "db:seed": "npm run db:seed --workspace lyne-api",
     "test": "npm run build:shared && npm run db:generate && vitest run",
-    "db:check-history": "node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/tsx/dist/cli.mjs services/api/scripts/check-migration-history.ts"
+    "db:check-history": "node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/tsx/dist/cli.mjs services/api/scripts/check-migration-history.ts",
+    "db:bootstrap": "npm run db:generate && node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/tsx/dist/cli.mjs services/api/scripts/bootstrap-database.ts",
+    "db:deploy:baseline": "node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/tsx/dist/cli.mjs services/api/scripts/check-migration-history.ts --baseline && node --env-file-if-exists=.env --env-file-if-exists=services/api/.env node_modules/prisma/build/index.js migrate deploy --config database/baseline.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import sharp from 'sharp';
+import { createPhotoStore } from './api/admin/photos.js';
 import { createDatabase } from './api/db.js';
 import { createRepository } from './api/auth/prisma-repository.js';
 import { createAdminRepository } from './api/admin/repository.js';
@@ -11,6 +16,7 @@ import { PERMISSIONS } from '@lyne/shared';
 // Integration checks use the real schema and repository in ONE rolled-back
 // transaction. Never alter the real administrator or leave demo data behind.
 const db = createDatabase();
+const photoDirectory = await mkdtemp(join(tmpdir(), 'lyne-phase2-photos-'));
 const marker = `qa${randomBytes(5).toString('hex')}`;
 const rollback = new Error('EXPECTED_TEST_ROLLBACK');
 let completed = false;
@@ -29,7 +35,7 @@ try {
       const actor = { id: owner.id, authVersion: owner.authVersion, roleCode: 'ADMIN', permissions: [...PERMISSIONS] };
       const repository = createAdminRepository(adapter);
       const authRepository = createRepository(adapter);
-      const app = await buildApp({ repository: authRepository, adminRepository: repository, config: readConfig({ NODE_ENV: 'test' }) });
+      const app = await buildApp({ repository: authRepository, adminRepository: repository, photos: createPhotoStore(photoDirectory), config: readConfig({ NODE_ENV: 'test' }) });
       try {
         const department = await repository.saveReference(actor, 'departments', { name: marker, isActive: true });
         const title = await repository.saveReference(actor, 'job-titles', { name: marker, isActive: true });
@@ -42,6 +48,22 @@ try {
         assert.equal(employee.salary, '123.45'); assert.equal(employee.hiredAt, '2026-09-28');
         await assert.rejects(() => repository.saveEmployee(actor, input), { code: 'ALREADY_EXISTS' });
         await assert.rejects(() => repository.saveEmployee(actor, { ...input, staffNumber: `${marker}2`.toUpperCase() }), { code: 'ALREADY_EXISTS' });
+        const ownerLogin = await app.inject({ method: 'POST', url: '/api/v1/auth/login', headers: { 'x-lyne-client': 'mobile' }, payload: { identifier: owner.username, password } });
+        assert.equal(ownerLogin.statusCode, 200);
+        const ownerHeaders = { authorization: `Bearer ${ownerLogin.json().data.token}`, 'x-lyne-client': 'mobile' };
+        const portrait = await sharp({ create: { width: 900, height: 1000, channels: 3, background: 'red' } }).withExif({ IFD0: { Artist: 'Private EXIF' } }).jpeg().toBuffer();
+        const uploaded = await app.inject({ method: 'POST', url: `/api/v1/employees/${employee.id}/photo`, headers: ownerHeaders, payload: { version: employee.version, data: portrait.toString('base64') } });
+        assert.equal(uploaded.statusCode, 200); employee = uploaded.json().data;
+        assert.ok(employee.photoUrl);
+        assert.equal((await app.inject(`/api/v1/employees/${employee.id}/photo`)).statusCode, 401);
+        const picture = await app.inject({ url: employee.photoUrl, headers: ownerHeaders });
+        assert.equal(picture.statusCode, 200); assert.equal(picture.headers['cache-control'], 'private, no-store');
+        const metadata = await sharp(picture.rawPayload).metadata(); assert.equal(metadata.format, 'jpeg'); assert.equal(metadata.exif, undefined); assert.ok(metadata.width <= 640 && metadata.height <= 640);
+        const outdated = await app.inject({ method: 'POST', url: `/api/v1/employees/${employee.id}/photo/remove`, headers: ownerHeaders, payload: { version: employee.version - 1 } });
+        assert.equal(outdated.statusCode, 409);
+        const removed = await app.inject({ method: 'POST', url: `/api/v1/employees/${employee.id}/photo/remove`, headers: ownerHeaders, payload: { version: employee.version } });
+        assert.equal(removed.statusCode, 200); employee = removed.json().data;
+        assert.equal((await app.inject({ url: `/api/v1/employees/${employee.id}/photo`, headers: ownerHeaders })).statusCode, 404);
         const low = await tx.user.update({ where: { id: account.account.id }, data: { mustChangePassword: false } });
         const lowActor = { id: low.id, authVersion: low.authVersion, roleCode: custom.code, permissions: ['employees.read', 'employees.write'] };
         assert.equal('salary' in await repository.employee(lowActor, employee.id), false);
@@ -87,5 +109,5 @@ try {
   assert.ok(completed); assert.equal(await db.user.count({ where: { username: { startsWith: marker } } }), 0);
   assert.equal(await db.employee.count({ where: { fullName: marker } }), 0);
   assert.deepEqual(await db.user.findUnique({ where: { username: process.env.SEED_ADMIN_USERNAME || 'admin' }, select: { id: true, passwordHash: true, authVersion: true, isActive: true } }), before);
-  console.info('PHASE2_INTEGRATION_OK: CRUD, references, salary isolation, unique constraints, versions, archive/restore, cards, roles, reset, revocation and audit; all test data rolled back, real admin unchanged.');
-} finally { await db.$disconnect(); }
+  console.info('PHASE2_INTEGRATION_OK: CRUD, references, salary isolation, unique constraints, versions, archive/restore, cards, private photos, EXIF removal, roles, reset, revocation and audit; all test data rolled back, real admin unchanged.');
+} finally { await db.$disconnect(); await rm(photoDirectory, { recursive: true, force: true }); }

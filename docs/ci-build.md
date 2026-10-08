@@ -67,3 +67,12 @@ l'environnement approprié, hors Git et hors rapports.
 
 `npm ci` exige un lockfile synchronisé avec les manifestes ; il n'exige ni
 GitHub ni un dépôt distant. Le lockfile sera conservé dans les commits locaux.
+
+## Actualisation du 8 octobre 2026
+
+GitHub est désormais explicitement autorisé par l’utilisateur. Les sources serveur
+ont été récupérées et la Phase 2 est poursuivie dans le dépôt. `npm test` couvre
+maintenant aussi le Personnel, les photos et les contrats mobiles (66 tests).
+La génération Prisma fonctionne depuis les sources. Pour une nouvelle base vide,
+voir `database/baseline/README.md` ; ne pas utiliser cette baseline sur le serveur
+historique. Rapport de livraison : `docs/rapport-phase-2-20261008.md`.

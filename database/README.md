@@ -55,3 +55,11 @@ Une sauvegarde privée a précédé la migration, puis une autre le seed du
 DB, la connexion, l'obligation de changement initial et la révocation à la
 déconnexion. Les événements d'audit de ces contrôles sont conservés.
 Voir `docs/serveur.md` et `docs/rapport-phase-1.md` pour les détails et limites.
+
+## Reprise du 8 octobre 2026
+
+Pour une **nouvelle base vide**, le schéma Phase 2 est maintenant reproductible
+avec `npm run db:bootstrap`, puis `npm run db:seed`. Voir
+[la procédure baseline](baseline/README.md). Le serveur existant conserve son
+historique : cette nouvelle procédure ne répare pas automatiquement le fichier
+SQL historique manquant et ne doit pas lui être appliquée.
