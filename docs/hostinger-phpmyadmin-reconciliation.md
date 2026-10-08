@@ -59,3 +59,20 @@ la reconstruction Personnel et ne pas remplacer le checksum du SQL manquant.
 L'activation du catalogue demande aussi la release Node privée Phase 3. La branche
 `hostinger-web` publie les fichiers web et le routage ; elle ne migre pas la base
 et ne remplace pas automatiquement cette release privée.
+
+## Exports reçus et comparaison effectuée
+
+Les exports fournis ensuite comprennent une structure seule et une sauvegarde
+complète. Les définitions DDL sont identiques entre les deux. Seule la structure
+a été importée dans une nouvelle base isolée ; comparaison Prisma à la Phase 2
+sans différence. Empreintes détaillées des colonnes, index, clés étrangères,
+contraintes et propriétés des tables également identiques. Les deux checksums
+historiques complets correspondent aux références conservées.
+
+Une procédure d'adoption explicite de baseline conserve l'ancien historique
+intact, avec précontrôles et retour protégé. Elle a été testée sur structures et
+données synthétiques, suivie des migrations catalogue et des recettes API.
+Voir `database/recovery/hostinger-20261009/README.md`. Aucun dump utilisateur
+n'est versionné, aucune donnée métier réelle n'est employée en test. La
+restauration complète de la sauvegarde client et l'application serveur restent
+à réaliser ; prochain relevé : `01-controle-lecture-seule.sql` dans phpMyAdmin.

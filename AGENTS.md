@@ -361,3 +361,14 @@ résultat. Checksums tronqués, pas de preuve supplémentaire de concordance du
 schéma. Demander une sauvegarde complète conservée privée et un export SQL de
 structure seule à comparer à la Phase 2. Procédure et constat exact :
 `docs/hostinger-phpmyadmin-reconciliation.md`. Aucun changement de base effectué.
+
+Exports SQL reçus ensuite : structure seule et sauvegarde complète, conservées
+privées hors dépôt. DDL identique ; structure restaurée isolément puis comparée
+au schéma Phase 2 : aucun écart, y compris index/FK/CHECK/collations. Checksums
+historiques complets conformes. Aucun enregistrement métier réel importé en test.
+Reprise explicite de baseline préparée dans `database/recovery/hostinger-20261009/`
+avec précontrôle, archive intacte de l'ancien suivi, retour avant catalogue et
+tests SQL reproductibles. Reprise + migrations catalogue + recettes Personnel/Menu
+passent localement. Archive du suivi à conserver même si un diff propose son DROP.
+Pas encore de reprise serveur : prochain contrôle phpMyAdmin en lecture seule,
+puis restauration privée de la sauvegarde avant toute intervention réelle.
