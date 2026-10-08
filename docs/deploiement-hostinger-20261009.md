@@ -1,5 +1,10 @@
 # Déploiement demandé — état du 9 octobre 2026 (Lubumbashi)
 
+> Actualisation : le déploiement hPanel effectué ensuite par l'utilisateur depuis
+> `main` a remplacé le site par le monorepo source (accueil 403, gestion/santé 404).
+> Les contrôles HTTPS réussis ci-dessous sont donc antérieurs à cet incident.
+> Correction par une branche publique compilée : `hostinger-github-web.md`.
+
 L’utilisateur demande désormais de publier les modifications sur GitHub puis sur
 le serveur après les contrôles, afin de vérifier progressivement le travail en
 ligne. Il autorise le déploiement et la réconciliation contrôlée de l’historique.

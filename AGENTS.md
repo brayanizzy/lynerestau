@@ -310,3 +310,19 @@ Ne pas confondre cet échec avec un test SSH négatif : aucun runner n’a déma
 Attendre la levée du verrouillage avant de relancer ; aucun déploiement Hostinger
 ni aucune réconciliation DB n’a eu lieu. Les secrets Actions sont inaccessibles
 à l’intégration (HTTP 403), même si le dépôt et le déclenchement sont autorisés.
+
+## Déploiement GitHub direct Hostinger — 9 octobre 2026
+
+L'utilisateur a relié `main` à `public_html` via le déploiement générique hPanel
+(Composer, aucun réglage Node). Cela publie les sources : accueil 403,
+gestion/santé 404, `/website/` et `/package.json` 200. Préparer et publier
+`hostinger-web` avec uniquement les fichiers publics compilés et le routage vers
+la release privée Phase 2 documentée. Conserver les changements source sur
+`setup-hostinger` tant que hPanel suit `main`, pour éviter une nouvelle publication
+du monorepo. Ensuite intégrer cette branche source dans `main`.
+
+Procédure : `docs/hostinger-github-web.md`. L'utilisateur doit sélectionner
+`hostinger-web` dans hPanel puis redéployer ; contrôler HTTPS après activation.
+La compilation et les contrôles navigateur locaux passent. Aucun accès serveur
+retrouvé ni migration réalisée ; ce canal ne livre pas l'API privée. Le périmètre
+reste navigateur et Phase 2 jusqu'à résolution des réserves serveur.
