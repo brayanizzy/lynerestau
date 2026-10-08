@@ -278,3 +278,27 @@ par `db:check-history` : son SQL original Personnel est toujours manquant.
 Ne pas appliquer la baseline à la production. Aucun déploiement distant dans ce lot.
 La recette sur appareil, l’impression physique, la réconciliation historique et
 la validation utilisateur restent des réserves de clôture ; pas de Phase 3.
+
+## Décision du 9 octobre 2026 (heure de Lubumbashi) — livraison continue demandée
+
+L’utilisateur autorise désormais GitHub puis le déploiement en ligne après les
+contrôles, et demande la réconciliation contrôlée des migrations pour terminer
+la Phase 2 avant le passage à la Phase 3. Il ne faut pas redemander l’autorisation
+de chaque déploiement déjà compris dans ce périmètre. Cette décision remplace
+l’ancienne restriction de travail sans GitHub/CI comme mode imposé.
+
+Accès SSH refusé depuis le cloud avant authentification ; l’utilisateur dispose
+seulement du gestionnaire de fichiers. Paquet complet avec dépendances préparé
+et testé après extraction, mais aucune activation distante ni migration réalisée.
+Le web public est identique au build courant ; les nouveaux écrans sont mobiles.
+Voir `docs/deploiement-hostinger-20261009.md` pour les preuves, le transfert manuel
+possible, le diagnostic privé et les prérequis réseau/Android restants.
+
+Précision immédiate de l’utilisateur : le projet reste dans le navigateur pour
+le moment. Différer les livraisons Expo/Android ; ne pas bloquer la Phase 2 web
+sur un APK ou une recette native. Valider le web responsive et les parcours API.
+
+Recette navigateur locale complète réussie (11 groupes de parcours), dont compte
+lecture seule, photo, PDF et écran 390 px. Comptes synthétiques désactivés et fiches
+archivées après les essais ; administrateur initial inchangé. Le blocage restant
+est l’intervention effective sur le serveur et son historique, pas un APK.
