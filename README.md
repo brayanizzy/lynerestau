@@ -14,6 +14,14 @@ personnel, achats et finances.
 
 ## Organisation du travail
 
+Décision du **8 octobre 2026** : les sources récupérées depuis le serveur sont
+versionnées dans **brayanizzy/lynerestau** pour poursuivre le projet sans attendre
+l'ordinateur d'origine. Cette décision remplace la suspension de Git ci-dessous.
+La Phase 2 reste en cours ; voir le [rapport de reprise cloud](docs/rapport-reprise-cloud-20261008.md)
+pour les contrôles actuels, la base locale et les limites de génération Prisma.
+
+Historique des décisions précédentes :
+
 Décision du 6 octobre 2026 : reprise par récupération des fichiers et
 correction du socle, puis poursuite de la Phase 2 en privilégiant SSH.
 Les commits Git sont temporairement suspendus ; l'historique existant reste

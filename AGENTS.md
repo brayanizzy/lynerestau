@@ -21,8 +21,23 @@ Journal de suivi du développement incrémental (spec §0, §13).
 | Mobile | Expo SDK 57 / RN 0.86 / TS 6 | Phase 0 |
 | Charte UI | Tokens dans `@lyne/ui`, palette par défaut éditable | Phase 0 |
 | CI | **Non activée par choix** ; validations exécutées par l'agent, sans GitHub | décision utilisateur du 25/09/2026 |
-| Git | Historique conservé pour récupération ; commits suspendus temporairement | décision utilisateur du 06/10/2026 |
+| Git | Sources récupérées du serveur et versionnées dans `brayanizzy/lynerestau` | décision utilisateur du 08/10/2026 |
 | Serveur | Déploiements SSH ; API Node 24 gérée par LiteSpeed ; vitrine et gestion séparées par chemins | décisions des 25 et 28/09/2026 |
+
+### Reprise depuis le serveur — décision du 08/10/2026
+
+- L'utilisateur demande de poursuivre sans attendre son ordinateur : récupérer
+  les sources du serveur, les versionner dans GitHub, puis continuer phase par
+  phase. Cette décision remplace la suspension temporaire de Git du 6 octobre.
+- Sources importées depuis `source-recovery-20261006.tar.gz` ; comparaison avec
+  `phase2-recovery-20261006-final.tar.gz`. Aucun historique `.git` dans l'archive :
+  l'historique déjà présent sur GitHub est conservé, sans inventer les anciens commits.
+- La Phase 2 reste ouverte. Son SQL de migration historique manque toujours ;
+  ne pas modifier l'historique de la base en ligne ni appliquer sa reconstruction
+  une deuxième fois. Le Personnel mobile et la recette réelle restent à compléter.
+- Les contrôles cloud utilisent une base locale isolée avec données de test.
+  Les résultats de 2026-09/10 ci-dessous sont historiques, pas des contrôles actuels.
+- État et validations actuels : `docs/rapport-reprise-cloud-20261008.md`.
 
 ### Fonctionnement validé le 25/09/2026
 
