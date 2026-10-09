@@ -115,5 +115,48 @@ Prochaine intervention : conserver un export complet récent de la base du site
 `u748819186_lyne_restau`, puis y importer le fichier `02` entier, sans migration
 concurrente. Malgré son nom « sur-copie », ce fichier est le même script gardé
 désormais testé sur copie ; il revérifie tous les prérequis avant l'adoption.
-Attendre son résultat avant toute migration catalogue. La reprise de la base
-du site et l'activation de l'API Phase 3 restent non confirmées.
+Attendre son résultat avant toute migration catalogue.
+
+**Confirmation suivante reçue :** l'utilisateur indique avoir terminé cette
+étape sur la base du site et obtenu `LYNE_BASELINE_PRESENTE`. La réconciliation
+est donc confirmée par l'utilisateur ; l'activation de l'API Phase 3 reste à faire.
+
+## Import catalogue sans terminal
+
+`04-installer-catalogue.sql` est généré par `build-menu-import.py` à partir des
+octets exacts des migrations baseline `202610090001_menu` et
+`202610090002_menu_tables`. Ne pas importer les SQL bruts séparément : ils ne
+consigneraient pas leur exécution dans le suivi Prisma.
+
+1. Importer `04` entier d'abord dans `u748819186_lyne_reprise` et transmettre
+   la base affichée et `LYNE_CATALOGUE_MIGRATIONS_OK`.
+2. Après validation de ce résultat et avec sauvegarde complète récente conservée,
+   importer le même fichier dans `u748819186_lyne_restau`, sans autre migration
+   concurrente. Attendre le même résultat avant activation de l'API.
+
+Le script exige la baseline adoptée, l'archive intacte, le schéma Phase 2 conforme,
+aucune table catalogue/permission menu existante, un rôle ADMIN et des clés
+étrangères actives. Il utilise le même verrou nommé que la reprise de l'historique.
+Les permissions et le premier suivi sont transactionnels ; les droits existants
+des autres rôles restent inchangés. ADMIN reçoit les trois droits ; RECEPTION,
+si présent, reçoit seulement `menu.read`.
+
+Avant le DDL, le second suivi est enregistré comme inachevé. Chaque commande
+contrôle ses diagnostics et la forme finale des trois tables est comparée aux
+empreintes du DDL canonique. La réussite termine les deux suivis avec leurs
+vrais checksums, reconnus ensuite par Prisma. Une coupure pendant le DDL peut
+laisser des tables partielles : cela n'est pas transactionnel dans MariaDB.
+Dans ce cas, arrêter, conserver le résultat et faire diagnostiquer l'état ;
+ne pas relancer aveuglément, supprimer une table ou marquer le suivi terminé.
+Une nouvelle exécution refuse un état partiel ou déjà migré. Le retour `03`
+est également refusé après ces migrations.
+
+`test-menu-import.py` utilise les mêmes variables socket local que le test
+précédent. Il teste succès, schéma canonique, checksums, droits ADMIN/RECEPTION,
+préservation des données synthétiques et des archives, refus sur dérive,
+collision de permission, désactivation des FK, seconde exécution et retour
+historique ; il injecte un échec DML et un échec au milieu du DDL, même avec
+un client SQL continuant après erreur. Aucun dump client utilisé.
+
+Le paquet de l'API et l'ordre d'activation sont documentés dans
+`docs/activation-catalogue-hostinger-20261009.md`.

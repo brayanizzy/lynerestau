@@ -96,3 +96,9 @@ restaurées. La reprise sur copie est validée. Après export complet récent,
 le même script gardé `02` peut être appliqué à `u748819186_lyne_restau` ; son
 résultat doit être reçu avant de déclarer l'historique du site réconcilié.
 Le catalogue et sa release API privée restent à activer séparément.
+
+L'utilisateur confirme ensuite avoir exécuté l'étape sur la base du site avec
+le résultat `LYNE_BASELINE_PRESENTE`. La reprise de `u748819186_lyne_restau` est
+donc consignée comme confirmée par l'utilisateur. Aucun résultat d'exécution des
+migrations catalogue n'a encore été reçu. Le nouvel import `04-installer-catalogue.sql`
+est préparé pour un premier essai sur la copie, puis sur le site après validation.

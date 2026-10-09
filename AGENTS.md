@@ -382,3 +382,15 @@ Prochaine étape guidée : export complet récent de `u748819186_lyne_restau`, p
 import entier du même script gardé `02` sur cette base du site. Attendre le
 résultat avant toute migration catalogue ; ne pas confondre la copie validée
 avec une réconciliation effective de la base applicative.
+
+L'utilisateur confirme ensuite `LYNE_BASELINE_PRESENTE` pour l'étape demandée
+sur la base du site : réconciliation consignée comme confirmée par lui.
+Le catalogue reste inactif à distance. Import phpMyAdmin `04-installer-catalogue.sql`
+préparé depuis les deux migrations exactes, avec checksums réels, précontrôles,
+transaction des permissions, suivi inachevé avant DDL, arrêt et refus de reprise
+automatique en cas d'échec partiel. Tests locaux des refus, rollback DML, DDL
+partiel et conservation des archives réussis ; suivi reconnu par Prisma.
+Paquet privé complet Phase 3 extrait et testé (Personnel/Menu et démarrage
+production). Procédure `docs/activation-catalogue-hostinger-20261009.md`.
+Ne modifier le routage public qu'après preuve des migrations du site et de
+l'extraction de la release privée ; l'autorisation de livraison existe déjà.

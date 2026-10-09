@@ -42,3 +42,16 @@ serveur exige la base et la release API compatibles, avant les fonctions web.
 
 Statut : **Phase 2 validée fonctionnellement par l'utilisateur, passage à la
 Phase 3 autorisé ; clôture technique sans réserve non acquise**.
+
+## Réserve historique levée selon les résultats utilisateur du 9 octobre
+
+Après comparaison des exports, précontrôle complet réussi et adoption testée
+sur `u748819186_lyne_reprise`, l'utilisateur confirme `LYNE_BASELINE_PRESENTE`
+sur la base du site `u748819186_lyne_restau`, conformément à l'étape demandée.
+L'ancien suivi est archivé par le script ; le SQL Personnel original reste
+manquant et n'a pas été reconstitué ni rejoué. La piste baseline devient le
+suivi applicable au schéma existant vérifié. Cette confirmation est un résultat
+transmis par l'utilisateur, pas une connexion directe de l'assistant à la base.
+Elle lève le blocage historique pour préparer les migrations catalogue ; les
+autres réserves de recette/production et la livraison effective Phase 3 restent
+distinctes. Procédure : `database/recovery/hostinger-20261009/README.md`.
