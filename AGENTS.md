@@ -394,3 +394,11 @@ Paquet privé complet Phase 3 extrait et testé (Personnel/Menu et démarrage
 production). Procédure `docs/activation-catalogue-hostinger-20261009.md`.
 Ne modifier le routage public qu'après preuve des migrations du site et de
 l'extraction de la release privée ; l'autorisation de livraison existe déjà.
+
+Import SQL et préparation publiés sur main/phase3-menu (`b97573d`). ZIP complet
+testé, mais envoi des assets du brouillon GitHub `hostinger-phase3-20261009`
+bloqué par CONNECT 403 vers uploads.github.com. Domaine ajouté au brouillon
+réseau cloud et start_skill actualisé ; sauvegarde confirmée, publication des
+paramètres requise avant reprise. ID du brouillon GitHub conservé dans
+`.tmp/phase3-github-release.json` ; ne pas créer de doublon. Aucun ZIP publié
+annoncé. HTTPS actuel : santé 200/DB up/phase 2, manifeste public inchangé.

@@ -78,3 +78,23 @@ catalogue restent conservées, même si l'ancienne API ne les expose pas.
 Ces essais n'utilisent aucune donnée du serveur. Ils ne prouvent pas une
 activation distante : elle attend les retours phpMyAdmin et gestionnaire de
 fichiers de l'utilisateur.
+
+## Publication et blocage réseau constatés
+
+Les sources et l'import SQL sont poussés sur `main` et `phase3-menu` au commit
+`b97573d`. Le ZIP complet est préparé dans
+`/workspace/livrables/hostinger-phase3-20261009/` (46 116 769 octets), avec notice
+et empreintes. Le brouillon de release GitHub existe, mais les pièces jointes
+ne sont pas encore téléversées : `uploads.github.com` est refusé par le proxy
+réseau (CONNECT 403). Aucun asset n'est annoncé disponible dans la release.
+
+Le domaine a été ajouté au brouillon des paramètres cloud, sans retirer les
+autres domaines. Les instructions de reprise de l'environnement sont actualisées.
+Leur enregistrement est confirmé ; l'utilisateur doit enregistrer les changements
+dans les paramètres puis publier l'environnement pour les activer. Reprendre
+ensuite l'envoi sur le brouillon existant, sans créer une autre release.
+
+Dernier contrôle HTTPS de ce lot : `/health` 200, DB up, phase 2 ; le manifeste
+reste sur le code web `23cf4f7` et l'API `phase2-recovery-20261006`. Aucun routage
+public n'a été modifié. L'essai SQL sur la copie peut avancer indépendamment
+du téléversement du ZIP.
