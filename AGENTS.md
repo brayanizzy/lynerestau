@@ -372,3 +372,13 @@ tests SQL reproductibles. Reprise + migrations catalogue + recettes Personnel/Me
 passent localement. Archive du suivi à conserver même si un diff propose son DROP.
 Pas encore de reprise serveur : prochain contrôle phpMyAdmin en lecture seule,
 puis restauration privée de la sauvegarde avant toute intervention réelle.
+
+Résultats utilisateur suivants, le 9 octobre 2026 : précontrôle du site
+`LYNE_CONTROLES_OK` (huit indicateurs à 1), puis adoption réussie sur la copie
+Hostinger `u748819186_lyne_reprise` : `LYNE_BASELINE_PRESENTE`, baseline Phase 2
+terminée avec zéro étape exécutée, archive historique conservée. Il s'agit de
+preuves transmises par l'utilisateur ; aucune exécution distante par l'assistant.
+Prochaine étape guidée : export complet récent de `u748819186_lyne_restau`, puis
+import entier du même script gardé `02` sur cette base du site. Attendre le
+résultat avant toute migration catalogue ; ne pas confondre la copie validée
+avec une réconciliation effective de la base applicative.

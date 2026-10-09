@@ -102,7 +102,18 @@ python3 database/recovery/hostinger-20261009/test-rebaseline.py
 Ce test crée deux bases `lyne_rebaseline_test_*` neuves et les conserve pour
 inspection. Il ne cible pas la base applicative configurée dans `.env`.
 
-**Statut de livraison :** procédure préparée et testée localement. Aucun de ces
-fichiers n'a été exécuté à distance par l'assistant. Le contrôle phpMyAdmin en
-lecture seule et la restauration privée restent les prochaines étapes. Aucune
-réconciliation serveur ni activation du catalogue n'est encore déclarée réussie.
+**Statut au 9 octobre 2026 :** l'utilisateur a transmis le précontrôle serveur
+`LYNE_CONTROLES_OK` avec les huit indicateurs à `1`, puis le résultat de l'adoption
+sur la copie privée `u748819186_lyne_reprise` : `LYNE_BASELINE_PRESENTE`.
+Le suivi actif contient `202610080001_phase2`, terminé, non annulé, avec zéro
+étape exécutée ; l'archive historique est présente. Ces opérations ont été
+effectuées par l'utilisateur dans phpMyAdmin, pas à distance par l'assistant.
+Ce relevé valide la reprise de l'historique sur copie ; il ne constitue pas un
+audit ligne par ligne des données restaurées.
+
+Prochaine intervention : conserver un export complet récent de la base du site
+`u748819186_lyne_restau`, puis y importer le fichier `02` entier, sans migration
+concurrente. Malgré son nom « sur-copie », ce fichier est le même script gardé
+désormais testé sur copie ; il revérifie tous les prérequis avant l'adoption.
+Attendre son résultat avant toute migration catalogue. La reprise de la base
+du site et l'activation de l'API Phase 3 restent non confirmées.

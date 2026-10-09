@@ -74,5 +74,25 @@ intact, avec précontrôles et retour protégé. Elle a été testée sur struct
 données synthétiques, suivie des migrations catalogue et des recettes API.
 Voir `database/recovery/hostinger-20261009/README.md`. Aucun dump utilisateur
 n'est versionné, aucune donnée métier réelle n'est employée en test. La
-restauration complète de la sauvegarde client et l'application serveur restent
-à réaliser ; prochain relevé : `01-controle-lecture-seule.sql` dans phpMyAdmin.
+restauration complète de la sauvegarde client et l'application serveur restaient
+alors à réaliser ; les relevés suivants précisent l'avancement.
+
+## Résultats phpMyAdmin transmis ensuite — 9 octobre 2026
+
+- Précontrôle de la base du site : `LYNE_CONTROLES_OK`, huit indicateurs à `1`.
+- Adoption sur la base privée explicitement affichée `u748819186_lyne_reprise` :
+  précontrôles conformes, création du suivi candidat et renommage réussis,
+  résultat final `LYNE_BASELINE_PRESENTE`.
+- Suivi actif : `202610080001_phase2`, checksum vérifié par le SELECT final,
+  `finished_at = 2026-10-09 00:00:31.375` (fuseau serveur non établi),
+  `rolled_back_at = NULL`, `applied_steps_count = 0`.
+- Archive `_prisma_migrations_legacy_20261009` visible et vérifiée par le script.
+
+Les messages de résultat vide des SET/DDL et d'absence de colonne unique ne
+signalent pas un échec. Le message de débogage de l'interface phpMyAdmin n'annule
+pas les résultats SQL réussis affichés. Aucune donnée métier n'a été transmise
+dans ce relevé ; son contenu n'établit pas une comparaison exhaustive des lignes
+restaurées. La reprise sur copie est validée. Après export complet récent,
+le même script gardé `02` peut être appliqué à `u748819186_lyne_restau` ; son
+résultat doit être reçu avant de déclarer l'historique du site réconcilié.
+Le catalogue et sa release API privée restent à activer séparément.
