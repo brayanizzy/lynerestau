@@ -160,3 +160,32 @@ un client SQL continuant après erreur. Aucun dump client utilisé.
 
 Le paquet de l'API et l'ordre d'activation sont documentés dans
 `docs/activation-catalogue-hostinger-20261009.md`.
+
+## Erreur de syntaxe transmise pendant le contrôle final
+
+L'utilisateur a transmis une requête coupée au milieu de l'empreinte des index,
+avec une chaîne non fermée et l'erreur MariaDB 1064. Le fichier `04` publié a
+été téléchargé et comparé octet pour octet au fichier testé : il est complet
+(21 064 octets, SHA256
+`2ba9a69ecc14b412357383edf551f4149f0115e0140dc74f48f58c876e359a72`).
+L'origine précise de la coupure n'est pas établie. La base ciblée par cet essai
+ne figure pas dans le message d'erreur : ne pas supposer qu'il s'agit de la copie.
+
+Ne pas compléter seulement la quote ni relancer l'import `04`. Le DDL précède
+ce contrôle ; des tables peuvent déjà exister et le suivi peut être inachevé.
+Importer **`05-diagnostic-apres-interruption.sql` dans la base où l'erreur est
+survenue**, puis transmettre les résultats : nom de base, historique, tables
+présentes et les cinq indicateurs de conformité du catalogue. Le diagnostic ne
+modifie aucune donnée et n'utilise pas de variable d'une connexion précédente.
+
+Le test local reproduit la troncature à cet endroit : le DDL complet est présent,
+le suivi de la seconde migration reste inachevé et `05` détecte la conformité
+des tables. Il distingue aussi une création partielle des tables. Ce résultat
+local ne prouve pas l'état distant : attendre le diagnostic avant de préparer
+une éventuelle finalisation contrôlée, sans modifier les checksums ni supprimer
+les traces de l'import.
+
+Préférer le téléchargement du fichier complet puis l'onglet **Importer**, sans
+copier une sélection du code affiché dans GitHub. Les variantes `.sql.gz` des
+pièces jointes GitHub contiennent exactement le SQL versionné et peuvent être
+importées directement par phpMyAdmin, sans décompression manuelle.

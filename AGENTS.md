@@ -402,3 +402,12 @@ réseau cloud et start_skill actualisé ; sauvegarde confirmée, publication des
 paramètres requise avant reprise. ID du brouillon GitHub conservé dans
 `.tmp/phase3-github-release.json` ; ne pas créer de doublon. Aucun ZIP publié
 annoncé. HTTPS actuel : santé 200/DB up/phase 2, manifeste public inchangé.
+
+Incident utilisateur suivant : erreur SQL 1064 sur la vérification finale du
+catalogue, texte coupé au milieu du checksum d'index. Fichier GitHub `04`
+vérifié identique au fichier complet testé. Base ciblée non établie par le
+message d'erreur. Ne pas rejouer `04` ou compléter la requête isolément.
+Diagnostic `05-diagnostic-apres-interruption.sql` préparé/testé en lecture seule
+(nom de base, migrations, tables, cinq empreintes de schéma). Troncature reproduite
+localement avec DDL complet et suivi inachevé ; ne pas transposer cet état au
+serveur sans résultat utilisateur. Attendre ce diagnostic avant toute écriture.

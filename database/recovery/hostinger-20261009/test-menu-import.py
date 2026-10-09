@@ -120,5 +120,22 @@ assert sql(failed_ddl, "SELECT COUNT(*) FROM information_schema.TABLES WHERE TAB
 before = snapshot(failed_ddl)
 assert 'LYNE_CATALOGUE_REFUSE' in sql(failed_ddl, script)
 assert snapshot(failed_ddl) == before
+# Reproduce the exact class of user incident: statement truncated mid-checksum
+# after all DDL, with no subsequent statements received by phpMyAdmin.
+truncated = fixture()
+marker = "SET @lyne_ok = COALESCE(@lyne_ok AND @lyne_tables='02ff"
+offset = script.index(marker)
+partial = script[offset:].splitlines()[0]
+partial = partial[:partial.index("AND @lyne_indexes='") + len("AND @lyne_indexes='") + 40] + ';'
+sql(truncated, script[:offset] + partial, continued_error=True)
+assert sql(truncated, "SELECT finished_at IS NULL,applied_steps_count FROM _prisma_migrations WHERE migration_name='202610090002_menu_tables';") == '1\t0'
+diagnostic = (folder / '05-diagnostic-apres-interruption.sql').read_text()
+for target, conforms in [(name, True), (truncated, True), (failed_ddl, False)]:
+    before = snapshot(target)
+    result = sql(target, diagnostic)
+    assert result.splitlines()[0] == target
+    assert (result.splitlines()[-1] == target + '\t1\t1\t1\t1\t1') == conforms
+    assert snapshot(target) == before
 print('MENU_IMPORT_TESTS_OK: exact canonical DDL/checksums, grants, archive/custom data preservation, drift/collision/FK/retry/rollback guards, DML rollback and partial-DDL failure detection.')
+print('INTERRUPTION_DIAGNOSTIC_OK: mid-checksum truncation reproduced; complete, unfinished-complete and partial schemas distinguished without writes.')
 print('Synthetic fixtures retained:', *fixtures)
