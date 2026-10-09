@@ -5,6 +5,7 @@ Retains fixtures, including the intentional unfinished migration, for inspection
 """
 from pathlib import Path
 import hashlib
+import gzip
 import importlib.util
 import json
 import os
@@ -130,6 +131,7 @@ partial = partial[:partial.index("AND @lyne_indexes='") + len("AND @lyne_indexes
 sql(truncated, script[:offset] + partial, continued_error=True)
 assert sql(truncated, "SELECT finished_at IS NULL,applied_steps_count FROM _prisma_migrations WHERE migration_name='202610090002_menu_tables';") == '1\t0'
 diagnostic = (folder / '05-diagnostic-apres-interruption.sql').read_text()
+assert gzip.decompress((folder / '05-diagnostic-apres-interruption.sql.gz').read_bytes()).decode() == diagnostic
 for target, conforms in [(name, True), (truncated, True), (failed_ddl, False)]:
     before = snapshot(target)
     result = sql(target, diagnostic)

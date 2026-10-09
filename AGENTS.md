@@ -411,3 +411,10 @@ Diagnostic `05-diagnostic-apres-interruption.sql` préparé/testé en lecture se
 (nom de base, migrations, tables, cinq empreintes de schéma). Troncature reproduite
 localement avec DDL complet et suivi inachevé ; ne pas transposer cet état au
 serveur sans résultat utilisateur. Attendre ce diagnostic avant toute écriture.
+
+Après redémarrage de l'environnement : uploads.github.com joignable (racine 200),
+mais upload d'asset refusé HTTP 401 avec l'authentification disponible. Aucun
+asset publié, brouillon conservé. Reprise préparée dans
+`.tmp/upload-phase3-release.py` ; ne pas répéter l'envoi sans diagnostic/changement
+d'authentification. Diagnostic gzip distribué directement par Git, contenu
+décompressé identique au SQL testé. Catalogue serveur toujours non confirmé.

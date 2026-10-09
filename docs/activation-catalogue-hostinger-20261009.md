@@ -98,3 +98,21 @@ Dernier contrôle HTTPS de ce lot : `/health` 200, DB up, phase 2 ; le manifeste
 reste sur le code web `23cf4f7` et l'API `phase2-recovery-20261006`. Aucun routage
 public n'a été modifié. L'essai SQL sur la copie peut avancer indépendamment
 du téléversement du ZIP.
+
+## Incident de requête tronquée et état de l'envoi suivant
+
+L'utilisateur a signalé une erreur 1064 sur une requête de contrôle coupée au
+milieu d'une empreinte. Le fichier `04` publié reste complet, vérifié par
+téléchargement. Ne pas le relancer : utiliser d'abord le diagnostic en lecture
+seule `05-diagnostic-apres-interruption.sql.gz` dans la base concernée et
+attendre son résultat. Ce fichier gzip contient exactement le SQL `05` versionné
+et se télécharge directement depuis le dépôt ; aucun copier-coller nécessaire.
+
+Après la mise à jour de l'environnement, uploads.github.com est joignable
+(HTTP 200 sur la racine), mais le POST d'asset avec l'authentification existante
+renvoie désormais **401 Unauthorized**. Le blocage réseau est levé, l'autorisation
+d'envoi des assets n'est pas établie. Le brouillon de release est conservé sans
+asset publié. La publication Git des sources et du diagnostic fonctionne.
+Le paquet API reste prêt localement ; ne pas demander une nouvelle modification
+réseau pour ce refus d'authentification. Ne pas afficher ni extraire les secrets
+de la plateforme pour tenter de contourner ce problème.
